@@ -1,0 +1,59 @@
+html { font-size:62.5%; font-family:"Arial", sans-serif; height:100%; }
+html, body { margin:0;. padding:0; }
+body { min-height:100%; }
+body, p, h1, h2, h3, h4, a, ul, li, fieldset, form, input, button, table, thead, tfoot, tbody, tr, td { margin:0; padding:0; font-size:1.0rem; }
+
+h1, h2, h3, h4 { letter-spacing:-0.05rem; }
+
+h1 a, h2 a, h3 a, h4 a { font-size: 1.0em; }
+
+a { color:#008EBD; text-decoration:none; }
+a:visited {color:#046282;}
+a:hover { text-decoration:underline;}
+
+h1 { font-size:2.0rem; }
+h2 { font-size:1.8rem; }
+h3 { font-size:1.6rem; }
+h4 { font-size:1.4rem; }
+
+p { font-size:1.1rem; }
+small { font-size:1.0rem; }
+
+p.notice, p.warning, p.error { padding:1.0rem; }
+p.notice { background:#D0E6D3}
+p.warning { background:#FFDCA8}
+p.error { background:#FF6E6E}
+
+body { }
+body > header { position:relative; line-height:4.0rem; }
+body > header { display:flex; flex-flow:row nowrap; align-items:center; align-content:center; justify-content: space-between;}
+body > footer { position:absolute; bottom:0; left:0; right:0; line-height:4.0rem; }
+body > header, body > footer { padding:0 1.0rem; background:whitesmoke }
+
+table { border-collapse:collapse; width:100%; }
+table tr { border-top:.1rem solid lightgray;}
+table tr td, table tr th { padding:1.0rem; text-align:center; font-size:1.2rem; }
+
+.button { display:inline-block; vertical-align:middle; cursor:pointer; border:none; box-shadow:0 0 .2rem black;  appearance:none; color:#4A4A4A; padding:0rem 1.5rem; border-radius:0.5rem; text-decoration:none; background:white; transition:background .15s ease-in-out; line-height:3.0rem;}
+.button:visited { color:#4A4A4A; }
+.button:disabled { background:lightgray; cursor:default;}
+.button:hover { background:whitesmoke; text-decoration:none; }
+
+button.button:focus { outline:none; }
+
+.button.blue { box-shadow:none; background:#008EBD; color:white;}
+.button.blue:visited { color:white;}
+.button.blue:hover { background:#14AFE2;}
+
+.button.red { box-shadow:none; background:#FF6E6E; color:white;}
+.button.red:visited { color:white;}
+.button.red:hover { background:#FF8E8E;}
+
+form.inline { display:inline-block; }
+
+fieldset { padding:1.0rem; border:none; }
+label {display:block; font-size:1.1rem; font-weight:bold;}
+input{ appearance:none; border:.1rem solid #ccc; line-height:2.5rem; text-indent:1.0rem; font-size:1.1rem; width:100%;}
+.field-error input {border-color:#FF6E6E}
+.field-error .field-error-messages {display:block; font-size:1.0rem; padding:0.5rem;}
+
