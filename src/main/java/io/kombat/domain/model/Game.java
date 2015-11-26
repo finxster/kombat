@@ -7,7 +7,7 @@ import java.text.Normalizer;
 import java.util.Calendar;
 
 /**
- * Created by ac-bsilva on 26/11/15.
+ * Created by Bruno de Queiroz<creativelikeadog@gmail.com> on 26/11/15.
  */
 public class Game implements Serializable {
 
@@ -18,7 +18,6 @@ public class Game implements Serializable {
     @NotEmpty
     private String name;
 
-    @NotEmpty
     private String slug;
 
     private String picture;
