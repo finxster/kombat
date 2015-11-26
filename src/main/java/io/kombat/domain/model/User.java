@@ -4,6 +4,8 @@ import java.sql.Timestamp;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import sqlj.runtime.NamedIterator;
+
 /**
  * Created by ac-bsilva on 13/11/15.
  */
@@ -25,6 +27,18 @@ public class User implements GenericModel {
 	private Timestamp created;
 
 	private Timestamp updated;
+	
+	public User() {
+
+	}
+	
+	public User(Long id, String name, String email, Long experience, String picture) {
+		this.id = id;
+		this.name = name;
+		this.email = email;
+		this.experience = experience;
+		this.picture = picture;
+	}
 
 	public Long getId() {
 		return id;

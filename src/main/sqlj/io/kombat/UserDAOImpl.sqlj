@@ -12,7 +12,7 @@ import java.util.ArrayList;
  */
 #sql context UserContext;
 
-#sql iterator UserIter(Long id, String slug, String name, String email, String password);
+#sql iterator UserIter(Long id_user, String name, String email, Long experience, String picture);
 
 public class UserDAOImpl implements UserDAO {
 
@@ -32,41 +32,38 @@ public class UserDAOImpl implements UserDAO {
         try {
             this.context = new UserContext(String.format("jdbc:oracle:thin:@%s:%s:XE",host, port), "SYSTEM", "oracle", true);
         } catch(SQLException e){
-            return;
+        	e.printStackTrace();
         }
     }
 
     public User one(Long id) throws SQLException {
         UserIter users;
 
-        #sql[context] users = {SELECT id, slug, name, email, password FROM users WHERE id =:id};
+        #sql[context] users = {SELECT id_user, name, email, experience, picture FROM users WHERE id =:id};
 
         if (users.next()) {
-            return new User(users.id(), users.slug(), users.name(), users.email(), users.password());
+            return new User(users.id_user(), users.name(), users.email(), users.experience(), users.picture());
         }
 
         return null;
     }
 
     public void save(User user) throws SQLException {
-
         Long id = user.getId();
-        String slug = user.getSlug();
         String name = user.getName();
         String email = user.getEmail();
-        String password = user.getPassword();
+        Long experience = user.getExperience();
+        String picture = user.getPicture();
 
-        #sql[context] {UPDATE users SET slug = :slug, name = :name, email = :email, password = :password WHERE id = :id };
+        #sql[context] {UPDATE users SET name = :name, email = :email, experience = :experience, picture = :picture, updated = systimestamp WHERE id = :id };
     }
 
     public void create(User user) throws SQLException {
-
-        String slug = user.getSlug();
         String name = user.getName();
         String email = user.getEmail();
-        String password = user.getPassword();
+        String picture = user.getPicture();
 
-        #sql[context] {INSERT INTO users(id, slug, name, email, password) VALUES( USERS_SEQ.nextval, :slug, :name, :email, :password ) };
+        #sql[context] {INSERT INTO users(id_user, name, email, picture) VALUES( USERS_SEQ.nextval, :name, :email, :picture ) };
     }
 
     public void destroy(Long id) throws SQLException {
@@ -76,11 +73,11 @@ public class UserDAOImpl implements UserDAO {
     public List<User> fetch(Integer offset, Integer limit) throws SQLException {
         UserIter users;
 
-        #sql[context] users = {SELECT id, slug, name, email, password FROM users};
+        #sql[context] users = {SELECT id_user, name, email, experience, picture FROM users};
 
         List<User> results = new ArrayList<User>();
         while(users.next()){
-            results.add(new User(users.id(), users.slug(), users.name(), users.email(), users.password()));
+            results.add(new User(users.id_user(), users.name(), users.email(), users.experience(), users.picture()));
         }
 
         return results;
