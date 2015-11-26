@@ -5,7 +5,7 @@
 <t:page>
 
     <jsp:attribute name="header">
-      <h1><a href="/users/">Users</a> / ${user.slug}</h1>
+      <h1><a href="/users/">Users</a> / ${user.name}</h1>
     </jsp:attribute>
 
     <jsp:body>

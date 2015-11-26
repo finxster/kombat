@@ -32,20 +32,10 @@
         </c:if>
     </fieldset>
 
-    <c:set var="passwordValidation" value="${validations != null && validations.get('password') != null}"/>
-
-    <fieldset class="password ${passwordValidation ? 'field-error' : '' }">
-        <label for="password">Password</label>
-        <input type="password" name="password" value="${user != null ? user.password : ''}" maxlength="20"/>
-        <c:if test="${passwordValidation}">
-             <ul class="field-error-messages">
-                <c:forEach var="validation" items="${validations.get('password')}">
-                    <li>${validation}</li>
-                </c:forEach>
-            </ul>
-        </c:if>
-    </fieldset>
-
+	<fieldset>
+        <label for="picture">Picture</label>
+        <input type="text" name="picture" value="${user != null ? user.picture : ''}" maxlength="200"/>
+	</fieldset>
 
     <button type="submit" class="button blue">${param.button_name}</button>
 </form>
