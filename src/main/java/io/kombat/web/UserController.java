@@ -54,7 +54,7 @@ public class UserController {
         Map<String, Object> params = req.getParams();
         user.setEmail((String) params.get("email"));
         user.setName((String) params.get("name"));
-        user.setPassword((String) params.get("password"));
+//        user.setPassword((String) params.get("password"));
 
         HttpSession session = request.getSession();
 
@@ -96,7 +96,7 @@ public class UserController {
 
             current.setEmail(user.getEmail());
             current.setName(user.getName());
-            current.setPassword(user.getPassword());
+//            current.setPassword(user.getPassword());
             service.save(current);
 
             session.setAttribute("flash.notice", "User saved with success.");

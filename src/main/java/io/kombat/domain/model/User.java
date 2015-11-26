@@ -1,89 +1,85 @@
 package io.kombat.domain.model;
 
+import java.sql.Timestamp;
+
 import org.hibernate.validator.constraints.NotEmpty;
-
-import java.io.Serializable;
-
 
 /**
  * Created by ac-bsilva on 13/11/15.
  */
-public class User implements Serializable {
+public class User implements GenericModel {
 
-    private static final long serialVersionUID = -2281033197628568888L;
+	private static final long serialVersionUID = 1L;
 
-    private Long id;
+	private Long id;
 
-    @NotEmpty
-    private String slug;
+	@NotEmpty
+	private String name;
 
-    @NotEmpty
-    private String name;
+	private String email;
 
-    @NotEmpty
-    private String email;
+	private Long experience;
 
-    @NotEmpty
-    private String password;
+	private String picture;
 
-    public User() {
-    }
+	private Timestamp created;
 
-    public User(Long id, String slug, String name, String email, String password) {
-        this.id = id;
-        this.slug = slug;
-        this.name = name;
-        this.email = email;
-        this.password = password;
-    }
+	private Timestamp updated;
 
-    public Long getId() {
-        return id;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public String getSlug() {
-        return slug;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setSlug(String slug) {
-        this.slug = slug;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public void setName(String name) {
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-        this.name = name;
-        if (this.slug == null) {
-            String[] split = name.split(" ");
-            if (split.length > 1) {
-                this.slug = split[0].toLowerCase().charAt(0) + split[split.length - 1].toLowerCase();
-            } else {
-                this.slug = split[0].toLowerCase();
-            }
-        }
-    }
+	public Long getExperience() {
+		return experience;
+	}
 
-    public String getEmail() {
-        return email;
-    }
+	public void setExperience(Long experience) {
+		this.experience = experience;
+	}
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	public String getPicture() {
+		return picture;
+	}
 
-    public String getPassword() {
-        return password;
-    }
+	public void setPicture(String picture) {
+		this.picture = picture;
+	}
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	public Timestamp getCreated() {
+		return created;
+	}
+
+	public void setCreated(Timestamp created) {
+		this.created = created;
+	}
+
+	public Timestamp getUpdated() {
+		return updated;
+	}
+
+	public void setUpdated(Timestamp updated) {
+		this.updated = updated;
+	}
 
 }
