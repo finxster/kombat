@@ -2,8 +2,8 @@ package io.kombat.domain.model;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import java.sql.Timestamp;
 import java.text.Normalizer;
-import java.util.Calendar;
 
 /**
  * Created by Bruno de Queiroz<creativelikeadog@gmail.com> on 26/11/15.
@@ -21,14 +21,14 @@ public class Game implements GenericModel {
 
     private String picture;
 
-    private Calendar created;
+    private Timestamp created;
 
-    private Calendar updated;
+    private Timestamp updated;
 
     public Game() {
     }
 
-    public Game(Long id, String name, String slug, String picture, Calendar created, Calendar updated) {
+    public Game(Long id, String name, String slug, String picture, Timestamp created, Timestamp updated) {
         this.id = id;
         this.name = name;
         this.slug = slug;
@@ -76,19 +76,19 @@ public class Game implements GenericModel {
         this.picture = picture;
     }
 
-    public Calendar getCreated() {
+    public Timestamp getCreated() {
         return created;
     }
 
-    public void setCreated(Calendar created) {
+    public void setCreated(Timestamp created) {
         this.created = created;
     }
 
-    public Calendar getUpdated() {
+    public Timestamp getUpdated() {
         return updated;
     }
 
-    public void setUpdated(Calendar updated) {
+    public void setUpdated(Timestamp updated) {
         this.updated = updated;
     }
 }

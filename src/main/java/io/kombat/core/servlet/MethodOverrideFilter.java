@@ -7,7 +7,7 @@ import java.io.IOException;
 /**
  * Created by Bruno de Queiroz<creativelikeadog@gmail.com> on 26/11/15.
  */
-public class BodyParserFilter implements Filter {
+public class MethodOverrideFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -16,7 +16,7 @@ public class BodyParserFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        HttpRequest request = new HttpRequest((HttpServletRequest) servletRequest);
+        MethodOverrideRequest request = new MethodOverrideRequest((HttpServletRequest) servletRequest);
         filterChain.doFilter(request, servletResponse);
     }
 

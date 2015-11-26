@@ -18,28 +18,10 @@
         <resource-env-ref-type>javax.enterprise.inject.spi.BeanManager</resource-env-ref-type>
     </resource-env-ref>
 
-    <servlet>
-        <description>io.kombat.core.servlet.DefaultServlet</description>
-        <display-name>DefaultServlet</display-name>
-        <servlet-name>DefaultServlet</servlet-name>
-        <servlet-class>io.kombat.core.servlet.DefaultServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>DefaultServlet</servlet-name>
-        <url-pattern>/</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>default</servlet-name>
-        <url-pattern>/assets/*</url-pattern>
-    </servlet-mapping>
-
 
     <filter>
         <filter-name>BodyParserFilter</filter-name>
-        <filter-class>io.kombat.core.servlet.BodyParserFilter</filter-class>
+        <filter-class>io.kombat.core.servlet.MethodOverrideFilter</filter-class>
     </filter>
 
     <filter-mapping>
@@ -58,4 +40,26 @@
         <url-pattern>/*</url-pattern>
         <dispatcher>REQUEST</dispatcher>
     </filter-mapping>
+
+    <servlet>
+        <description>io.kombat.core.servlet.DefaultServlet</description>
+        <display-name>DefaultServlet</display-name>
+        <servlet-name>DefaultServlet</servlet-name>
+        <servlet-class>io.kombat.core.servlet.DefaultServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+        <multipart-config>
+            <max-file-size>3145728</max-file-size>
+            <max-request-size>5242880</max-request-size>
+        </multipart-config>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>DefaultServlet</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>/assets/*</url-pattern>
+    </servlet-mapping>
 </web-app>

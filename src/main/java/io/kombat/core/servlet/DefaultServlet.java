@@ -1,21 +1,15 @@
 package io.kombat.core.servlet;
 
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.util.Set;
+import io.kombat.core.annotation.*;
+import org.reflections.Reflections;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.reflections.Reflections;
-
-import io.kombat.core.annotation.Controller;
-import io.kombat.core.annotation.DELETE;
-import io.kombat.core.annotation.GET;
-import io.kombat.core.annotation.POST;
-import io.kombat.core.annotation.PUT;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.util.Set;
 
 /**
  * Created by Bruno de Queiroz<creativelikeadog@gmail.com> on 26/11/15.

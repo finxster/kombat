@@ -1,4 +1,4 @@
-package io.kombat.domain.dao;
+package io.kombat.domain.services;
 
 import io.kombat.domain.model.GenericModel;
 
@@ -9,15 +9,7 @@ import java.util.List;
 /**
  * Created by Bruno de Queiroz<creativelikeadog@gmail.com> on 26/11/15.
  */
-public interface GenericDAO<T extends GenericModel> extends Serializable {
-
-    String HOST = System.getenv("ORACLE_PORT_1521_TCP_ADDR");
-
-    String PORT = System.getenv("ORACLE_PORT_1521_TCP_PORT");
-
-    String USER = "SYSTEM";
-
-    String PASSWORD = "oracle";
+public interface GenericService<T extends GenericModel> extends Serializable {
 
     T one(Long id) throws SQLException;
 

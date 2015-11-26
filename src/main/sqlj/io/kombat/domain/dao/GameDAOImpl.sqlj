@@ -1,0 +1,84 @@
+package io.kombat.domain.dao;
+
+import io.kombat.domain.model.Game;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.sql.Timestamp;
+
+import javax.enterprise.context.Dependent;
+import java.io.Serializable;
+
+/**
+ * Created by Bruno de Queiroz<creativelikeadog@gmail.com> on 26/11/15.
+ */
+#sql context GameContext;
+
+#sql iterator GameIter(Long id_game, String name, String slug, String picture, Timestamp created, Timestamp updated);
+
+@Dependent
+public class GameDAOImpl implements GameDAO {
+
+    private static final long serialVersionUID = 2741059994483786816L;
+
+    private GameContext context;
+
+    public GameDAOImpl() {
+        try {
+            this.context = new GameContext(String.format("jdbc:oracle:thin:@%s:%s:XE", HOST, PORT), USER, PASSWORD, true);
+        } catch (SQLException e) {
+            return;
+        }
+    }
+
+    @Override
+    public Game one(Long id) throws SQLException {
+        GameIter games;
+
+        #sql[context] games = {SELECT id_game, name, slug, picture, created, updated FROM games WHERE id_game = :id};
+
+        if (games.next()) {
+            return new Game(games.id_game(), games.name(), games.slug(), games.picture(), games.created(), games.updated());
+        }
+
+        return null;
+    }
+
+    public void save(Game game) throws SQLException {
+
+        Long id = game.getId();
+        String name = game.getName();
+        String slug = game.getSlug();
+        String picture = game.getPicture();
+
+        #sql[context] {UPDATE games SET name = :name, slug = :slug, picture = :picture, updated = sysdate WHERE id_game = :id };
+    }
+
+    public void create(Game game) throws SQLException {
+
+        String name = game.getName();
+        String slug = game.getSlug();
+        String picture = game.getPicture();
+
+        #sql[context] {INSERT INTO games(id_game, name, slug, picture) VALUES( GAMES_SEQ.nextval, :name, :slug, :picture ) };
+    }
+
+    public void destroy(Long id) throws SQLException {
+        #sql[context] {DELETE FROM games WHERE id =:id};
+    }
+
+    @Override
+    public List<Game> fetch(Integer offset, Integer limit) throws SQLException {
+        GameIter games;
+
+        List<Game> results = new ArrayList<Game>();
+
+        #sql[context] games = {SELECT id_game, name, slug, picture, created, updated FROM games};
+
+        if (games.next()) {
+            results.add(new Game(games.id_game(), games.name(), games.slug(), games.picture(), games.created(), games.updated()));
+        }
+
+        return results;
+    }
+}

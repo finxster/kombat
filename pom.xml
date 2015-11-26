@@ -32,7 +32,7 @@
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
-            <version>7.0</version>
+            <version>6.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -44,6 +44,11 @@
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
             <version>1.9.2</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.4</version>
         </dependency>
         <dependency>
             <groupId>org.reflections</groupId>
@@ -128,6 +133,10 @@
                 <directory>src/main/webapp/assets</directory>
                 <targetPath>assets</targetPath>
             </resource>
+            <resource>
+                <directory>src/main/webapp/uploads</directory>
+                <targetPath>uploads</targetPath>
+            </resource>
         </resources>
         <plugins>
             <plugin>
@@ -181,6 +190,7 @@
                         <goals>
                             <goal>sqlj</goal>
                         </goals>
+
                         <configuration>
                             <encoding>UTF-8</encoding>
                             <sqljDirs>

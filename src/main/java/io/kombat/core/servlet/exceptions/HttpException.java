@@ -12,6 +12,10 @@ public class HttpException extends RuntimeException {
 
     private String redirect;
 
+    public HttpException(int code) {
+        this.code = code;
+    }
+
     public HttpException(int code, String redirect) {
         this.code = code;
         this.redirect = redirect;
