@@ -5,7 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 /**
- * Created by ac-bsilva on 23/11/15.
+ * Created by Bruno de Queiroz<creativelikeadog@gmail.com> on 26/11/15.
  */
 public class BodyParserFilter implements Filter {
 

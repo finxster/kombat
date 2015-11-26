@@ -2,14 +2,13 @@ package io.kombat.domain.model;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-import java.io.Serializable;
 import java.text.Normalizer;
 import java.util.Calendar;
 
 /**
  * Created by Bruno de Queiroz<creativelikeadog@gmail.com> on 26/11/15.
  */
-public class Game implements Serializable {
+public class Game implements GenericModel {
 
     private static final long serialVersionUID = 5548046233660569710L;
 

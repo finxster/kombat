@@ -18,7 +18,7 @@ import io.kombat.core.annotation.POST;
 import io.kombat.core.annotation.PUT;
 
 /**
- * Created by ac-bsilva on 18/11/15.
+ * Created by Bruno de Queiroz<creativelikeadog@gmail.com> on 26/11/15.
  */
 public class DefaultServlet extends HttpServlet {
 

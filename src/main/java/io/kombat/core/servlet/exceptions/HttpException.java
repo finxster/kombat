@@ -1,7 +1,7 @@
 package io.kombat.core.servlet.exceptions;
 
 /**
- * Created by ac-bsilva on 23/11/15.
+ * Created by Bruno de Queiroz<creativelikeadog@gmail.com> on 26/11/15.
  */
 public class HttpException extends RuntimeException {
     private static final long serialVersionUID = 324957544347184421L;

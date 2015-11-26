@@ -17,7 +17,7 @@ import javax.ws.rs.HttpMethod;
 import io.kombat.core.servlet.exceptions.HttpException;
 
 /**
- * Created by ac-bsilva on 18/11/15.
+ * Created by Bruno de Queiroz<creativelikeadog@gmail.com> on 26/11/15.
  */
 public class ServletRoutes {
 

@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import io.kombat.core.annotation.Before;
 
 /**
- * Created by ac-bsilva on 19/11/15.
+ * Created by Bruno de Queiroz<creativelikeadog@gmail.com> on 26/11/15.
  */
 public class ServletMapping {
 

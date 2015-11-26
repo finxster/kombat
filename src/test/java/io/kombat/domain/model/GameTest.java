@@ -3,7 +3,7 @@ package io.kombat.domain.model;
 import junit.framework.TestCase;
 
 /**
- * Created by ac-bsilva on 26/11/15.
+ * Created by Bruno de Queiroz<creativelikeadog@gmail.com> on 26/11/15.
  */
 public class GameTest extends TestCase {
 

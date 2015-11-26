@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.Enumeration;
 
 /**
- * Created by ac-bsilva on 19/11/15.
+ * Created by Bruno de Queiroz<creativelikeadog@gmail.com> on 26/11/15.
  */
 public class FlashFilter implements Filter {
 
