@@ -1,99 +1,102 @@
 package io.kombat.domain.model;
 
-import java.sql.Timestamp;
-
 import org.hibernate.validator.constraints.NotEmpty;
 
-import sqlj.runtime.NamedIterator;
+import javax.persistence.CascadeType;
+import javax.persistence.OneToOne;
+import java.sql.Timestamp;
 
 /**
  * Created by ac-bsilva on 13/11/15.
  */
 public class User implements GenericModel {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private Long id;
+    private Long id;
 
-	@NotEmpty
-	private String name;
+    @NotEmpty
+    private String name;
 
-	private String email;
+    @NotEmpty
+    private String email;
 
-	private Long experience;
+    private Long experience;
 
-	private String picture;
+    private String picture;
 
-	private Timestamp created;
+    private Timestamp created;
 
-	private Timestamp updated;
-	
-	public User() {
+    private Timestamp updated;
 
-	}
-	
-	public User(Long id, String name, String email, Long experience, String picture) {
-		this.id = id;
-		this.name = name;
-		this.email = email;
-		this.experience = experience;
-		this.picture = picture;
-	}
+    public User() {
 
-	public Long getId() {
-		return id;
-	}
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public User(Long id, String name, String email, Long experience, String picture, Timestamp created, Timestamp updated) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.experience = experience;
+        this.picture = picture;
+        this.created = created;
+        this.updated = updated;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public Long getExperience() {
-		return experience;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public void setExperience(Long experience) {
-		this.experience = experience;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	public String getPicture() {
-		return picture;
-	}
+    public Long getExperience() {
+        return experience;
+    }
 
-	public void setPicture(String picture) {
-		this.picture = picture;
-	}
+    public void setExperience(Long experience) {
+        this.experience = experience;
+    }
 
-	public Timestamp getCreated() {
-		return created;
-	}
+    public String getPicture() {
+        return picture;
+    }
 
-	public void setCreated(Timestamp created) {
-		this.created = created;
-	}
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
 
-	public Timestamp getUpdated() {
-		return updated;
-	}
+    public Timestamp getCreated() {
+        return created;
+    }
 
-	public void setUpdated(Timestamp updated) {
-		this.updated = updated;
-	}
+    public void setCreated(Timestamp created) {
+        this.created = created;
+    }
+
+    public Timestamp getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(Timestamp updated) {
+        this.updated = updated;
+    }
 
 }

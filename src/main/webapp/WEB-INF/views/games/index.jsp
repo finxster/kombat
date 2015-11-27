@@ -9,7 +9,7 @@
     </jsp:attribute>
 
     <jsp:body>
-        <c:if test="${games != null}">
+        <c:if test="${models != null}">
             <table>
                 <thead>
                     <tr>
@@ -20,7 +20,7 @@
                         <th></th>
                     </tr>
                 </thead>
-                <c:forEach var="game" items="${games}">
+                <c:forEach var="game" items="${models}">
                     <tr>
                         <td>${game.id}</td>
                         <td>${game.slug}</td>

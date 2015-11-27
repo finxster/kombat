@@ -20,12 +20,11 @@ public class FileManager implements Serializable {
 
     private static final String UPLOAD_PATH = "./src/main/webapp/uploads";
 
-    private File createDirOrFile(String path) throws IOException {
+    private File createFile(String path) throws IOException {
         Pattern p = Pattern.compile("(\\/[^\\.\\/]+\\.[\\d\\w]+)$");
         Matcher matcher = p.matcher(path);
-        File dir;
         if (matcher.find()) {
-            dir = new File(path.replace(matcher.group(1), ""));
+            File dir = new File(path.replace(matcher.group(1), ""));
             if (!dir.exists()) {
                 dir.mkdirs();
             }
@@ -36,14 +35,9 @@ public class FileManager implements Serializable {
             }
 
             return file;
-        } else {
-            dir = new File(path.replace(matcher.group(1), ""));
-            if (!dir.exists()) {
-                dir.mkdirs();
-            }
-
-            return dir;
         }
+
+        return null;
     }
 
     private String getFileName(Part part) {
@@ -59,11 +53,19 @@ public class FileManager implements Serializable {
     public String create(HttpServletRequest request, String field, String path) {
         try {
             Part upload = request.getPart(field);
+            if (upload == null || 0L == upload.getSize()) {
+                return null;
+            }
+
             String fileName = getFileName(upload);
             InputStream in = upload.getInputStream();
             String relativeFilePath = path + "/" + fileName;
 
-            File file = createDirOrFile(UPLOAD_PATH + relativeFilePath);
+            File file = createFile(UPLOAD_PATH + relativeFilePath);
+            if (file == null) {
+                return null;
+            }
+
             FileOutputStream out = new FileOutputStream(file);
             IOUtils.copy(in, out);
             in.close();

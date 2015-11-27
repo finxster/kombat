@@ -1,36 +1,39 @@
-package io.kombat;
+package io.kombat.domain.dao;
 
-import io.kombat.domain.dao.UserDAO;
 import io.kombat.domain.model.User;
 
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ArrayList;
+import java.sql.Timestamp;
+
+import javax.enterprise.context.Dependent;
 
 /**
  * Created by ac-bsilva on 13/11/15.
  */
 #sql context UserContext;
 
-#sql iterator UserIter(Long id_user, String name, String email, Long experience, String picture);
+#sql iterator UserIter(Long id_user, String name, String email, Long experience, String picture, Timestamp created, Timestamp updated);
 
+@Dependent
 public class UserDAOImpl implements UserDAO {
+
+    private static final long serialVersionUID = 2341059994483786816L;
 
     private UserContext context;
 
-    static{
+    static {
         try {
-            Class.forName ("oracle.jdbc.OracleDriver");
+            Class.forName("oracle.jdbc.OracleDriver");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
     public UserDAOImpl() {
-        String host = "localhost";
-        String port = "49161";
         try {
-            this.context = new UserContext(String.format("jdbc:oracle:thin:@%s:%s:XE",host, port), "SYSTEM", "oracle", true);
+            this.context = new UserContext(String.format("jdbc:oracle:thin:@%s:%s:XE", HOST, PORT), USER, PASSWORD, true);
         } catch(SQLException e){
         	e.printStackTrace();
         }
@@ -39,10 +42,10 @@ public class UserDAOImpl implements UserDAO {
     public User one(Long id) throws SQLException {
         UserIter users;
 
-        #sql[context] users = {SELECT id_user, name, email, experience, picture FROM users WHERE id =:id};
+        #sql[context] users = {SELECT id_user, name, email, experience, picture, created, updated FROM users WHERE id_user =:id};
 
         if (users.next()) {
-            return new User(users.id_user(), users.name(), users.email(), users.experience(), users.picture());
+            return new User(users.id_user(), users.name(), users.email(), users.experience(), users.picture(), users.created(), users.updated());
         }
 
         return null;
@@ -55,7 +58,7 @@ public class UserDAOImpl implements UserDAO {
         Long experience = user.getExperience();
         String picture = user.getPicture();
 
-        #sql[context] {UPDATE users SET name = :name, email = :email, experience = :experience, picture = :picture, updated = systimestamp WHERE id = :id };
+        #sql[context] {UPDATE users SET name = :name, email = :email, experience = :experience, picture = :picture, updated = systimestamp WHERE id_user = :id };
     }
 
     public void create(User user) throws SQLException {
@@ -67,17 +70,17 @@ public class UserDAOImpl implements UserDAO {
     }
 
     public void destroy(Long id) throws SQLException {
-        #sql[context] {DELETE FROM users WHERE id =:id};
+        #sql[context] {DELETE FROM users WHERE id_user = :id};
     }
 
     public List<User> fetch(Integer offset, Integer limit) throws SQLException {
         UserIter users;
 
-        #sql[context] users = {SELECT id_user, name, email, experience, picture FROM users};
+        #sql[context] users = {SELECT id_user, name, email, experience, picture, created, updated FROM users};
 
         List<User> results = new ArrayList<User>();
         while(users.next()){
-            results.add(new User(users.id_user(), users.name(), users.email(), users.experience(), users.picture()));
+            results.add(new User(users.id_user(), users.name(), users.email(), users.experience(), users.picture(), users.created(), users.updated()));
         }
 
         return results;

@@ -1,6 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<c:set var="user" scope="request" value="${model}"/>
 <t:page>
      <jsp:attribute name="header">
       <h1><a href="/users/">Users</a> / create</h1>

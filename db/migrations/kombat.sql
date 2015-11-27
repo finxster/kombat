@@ -175,3 +175,10 @@ DROP TABLE matches;
 DROP SEQUENCE matches_seq;
 
 DROP TABLE match_players;
+
+
+resources :events do
+	members do
+		post "active"
+	end
+end

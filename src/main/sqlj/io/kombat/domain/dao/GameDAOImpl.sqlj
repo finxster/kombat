@@ -23,6 +23,14 @@ public class GameDAOImpl implements GameDAO {
 
     private GameContext context;
 
+    static {
+        try {
+            Class.forName("oracle.jdbc.OracleDriver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     public GameDAOImpl() {
         try {
             this.context = new GameContext(String.format("jdbc:oracle:thin:@%s:%s:XE", HOST, PORT), USER, PASSWORD, true);
@@ -51,7 +59,7 @@ public class GameDAOImpl implements GameDAO {
         String slug = game.getSlug();
         String picture = game.getPicture();
 
-        #sql[context] {UPDATE games SET name = :name, slug = :slug, picture = :picture, updated = sysdate WHERE id_game = :id };
+        #sql[context] {UPDATE games SET name = :name, slug = :slug, picture = :picture, updated = systimestamp WHERE id_game = :id };
     }
 
     public void create(Game game) throws SQLException {
@@ -64,7 +72,7 @@ public class GameDAOImpl implements GameDAO {
     }
 
     public void destroy(Long id) throws SQLException {
-        #sql[context] {DELETE FROM games WHERE id =:id};
+        #sql[context] {DELETE FROM games WHERE id_game =:id};
     }
 
     @Override

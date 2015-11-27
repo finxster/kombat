@@ -8,4 +8,6 @@ import java.io.Serializable;
 public interface GenericModel extends Serializable {
 
     Long getId();
+
+    void setId(Long id);
 }

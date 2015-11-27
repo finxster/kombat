@@ -10,13 +10,4 @@ import io.kombat.domain.model.User;
  */
 public interface UserDAO extends GenericDAO<User> {
 
-    User one(Long id) throws SQLException;
-
-    void save(User user) throws SQLException;
-
-    void create(User user) throws SQLException;
-
-    void destroy(Long id) throws SQLException;
-
-    List<User> fetch(Integer offset, Integer limit) throws SQLException;
 }

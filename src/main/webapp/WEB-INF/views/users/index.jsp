@@ -9,7 +9,7 @@
     </jsp:attribute>
 
     <jsp:body>
-        <c:if test="${users != null}">
+        <c:if test="${models != null}">
             <table>
                 <thead>
                     <tr>
@@ -23,7 +23,7 @@
                         <th></th>
                     </tr>
                 </thead>
-                <c:forEach var="user" items="${users}">
+                <c:forEach var="user" items="${models}">
                     <tr>
                         <td>${user.id}</td>
                         <td>${user.name}</td>

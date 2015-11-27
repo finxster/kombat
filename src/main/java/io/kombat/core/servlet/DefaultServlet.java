@@ -39,7 +39,7 @@ public class DefaultServlet extends HttpServlet {
             Controller request = controller.getAnnotation(Controller.class);
             String prefix = request.value();
             try {
-                for (Method method : controller.getDeclaredMethods()) {
+                for (Method method : controller.getMethods()) {
 
                     routes.addMethod(controller, method);
 
