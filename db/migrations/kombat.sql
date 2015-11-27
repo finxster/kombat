@@ -4,7 +4,7 @@ CREATE TABLE Users (
 	email VARCHAR2(100) NOT NULL,
 	experience NUMBER(19,0) DEFAULT 0,
 	picture VARCHAR2(200),
-	created TIMESTAMP DEFAULT sysdate,
+	created TIMESTAMP DEFAULT systimestamp,
 	updated TIMESTAMP,
 	PRIMARY KEY(id_user),	
 	CONSTRAINT unique_user_name UNIQUE(name),
@@ -22,7 +22,7 @@ CREATE TABLE Games (
 	name VARCHAR2(100) NOT NULL,
 	slug VARCHAR2(50) NOT NULL,
 	picture VARCHAR2(200),
-	created TIMESTAMP DEFAULT sysdate,
+	created TIMESTAMP DEFAULT systimestamp,
 	updated TIMESTAMP,
 	PRIMARY KEY(id_game),
 	CONSTRAINT unique_game_name UNIQUE(name),
@@ -40,7 +40,7 @@ CREATE TABLE Characters (
 	name VARCHAR2(100) NOT NULL,
 	picture VARCHAR2(200),
 	game_id INT NOT NULL,
-	created TIMESTAMP DEFAULT sysdate,
+	created TIMESTAMP DEFAULT systimestamp,
 	updated TIMESTAMP,
 	PRIMARY KEY(id_character),	
 	CONSTRAINT unique_game_character UNIQUE(game_id,name),
@@ -59,7 +59,7 @@ CREATE TABLE Users_Games (
 	user_id INT NOT NULL,
 	game_id INT NOT NULL,
 	played NUMBER(11,0) DEFAULT 1,
-	created TIMESTAMP DEFAULT sysdate,
+	created TIMESTAMP DEFAULT systimestamp,
 	updated TIMESTAMP,
 	PRIMARY KEY(user_id,game_id),
 	CONSTRAINT fk_user_game
@@ -75,7 +75,7 @@ CREATE TABLE User_Characters (
 	user_id INT NOT NULL,
 	character_id INT NOT NULL,
 	played NUMBER(11,0) DEFAULT 1,
-	created TIMESTAMP DEFAULT sysdate,
+	created TIMESTAMP DEFAULT systimestamp,
 	updated TIMESTAMP,
 	PRIMARY KEY(id_user_character),
 	CONSTRAINT fk_user_character
@@ -96,7 +96,7 @@ CREATE TABLE Gameplays (
 	id_gameplay INT NOT NULL,
 	type CHAR CHECK(type in('T','S')),
 	description VARCHAR2(200),
-	created TIMESTAMP DEFAULT sysdate,
+	created TIMESTAMP DEFAULT systimestamp,
 	updated TIMESTAMP,
   PRIMARY KEY(id_gameplay)
 );
@@ -124,7 +124,7 @@ CREATE TABLE Matches (
 	gameplay_id INT NOT NULL,
 	status CHAR CHECK(status in('S','C','F')),
 	experience NUMBER(11,0) DEFAULT 100,
-	created TIMESTAMP DEFAULT sysdate,
+	created TIMESTAMP DEFAULT systimestamp,
 	updated TIMESTAMP,
 	PRIMARY KEY(id_match),
 	CONSTRAINT fk_match_gameplay
