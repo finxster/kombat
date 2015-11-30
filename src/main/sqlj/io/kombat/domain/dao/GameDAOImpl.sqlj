@@ -1,6 +1,7 @@
 package io.kombat.domain.dao;
 
 import io.kombat.domain.model.Game;
+import io.kombat.domain.model.Character;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.sql.Timestamp;
 
 import javax.enterprise.context.Dependent;
 import java.io.Serializable;
+import javax.inject.Inject;
 
 /**
  * Created by Bruno de Queiroz<creativelikeadog@gmail.com> on 26/11/15.
@@ -15,13 +17,16 @@ import java.io.Serializable;
 #sql context GameContext;
 
 #sql iterator GameIter(Long id_game, String name, String slug, String picture, Timestamp created, Timestamp updated);
-
 @Dependent
 public class GameDAOImpl implements GameDAO {
 
     private static final long serialVersionUID = 2741059994483786816L;
 
     private GameContext context;
+
+    @Inject
+    private CharacterDAO characters;
+
 
     static {
         try {
@@ -46,7 +51,9 @@ public class GameDAOImpl implements GameDAO {
         #sql[context] games = {SELECT id_game, name, slug, picture, created, updated FROM games WHERE id_game = :id};
 
         if (games.next()) {
-            return new Game(games.id_game(), games.name(), games.slug(), games.picture(), games.created(), games.updated());
+            Game game = new Game(games.id_game(), games.name(), games.slug(), games.picture(), games.created(), games.updated());
+            game.setCharacters(characters.byGame(game.getId()));
+            return game;
         }
 
         return null;
@@ -72,7 +79,8 @@ public class GameDAOImpl implements GameDAO {
     }
 
     public void destroy(Long id) throws SQLException {
-        #sql[context] {DELETE FROM games WHERE id_game =:id};
+        #sql[context] {DELETE FROM games WHERE id_game = :id};
+        characters.destroyByGame(id);
     }
 
     @Override
@@ -83,7 +91,7 @@ public class GameDAOImpl implements GameDAO {
 
         #sql[context] games = {SELECT id_game, name, slug, picture, created, updated FROM games};
 
-        if (games.next()) {
+        while(games.next()) {
             results.add(new Game(games.id_game(), games.name(), games.slug(), games.picture(), games.created(), games.updated()));
         }
 

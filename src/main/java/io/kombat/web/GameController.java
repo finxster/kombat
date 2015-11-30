@@ -14,7 +14,6 @@ import java.io.IOException;
 @Controller("/games")
 public class GameController extends AbstractCRUDController<Game, GameService> {
 
-
     public void model(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Game game = new Game();
 
@@ -27,6 +26,4 @@ public class GameController extends AbstractCRUDController<Game, GameService> {
 
         validate(game, request, response);
     }
-
-
 }

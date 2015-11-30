@@ -4,6 +4,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import java.sql.Timestamp;
 import java.text.Normalizer;
+import java.util.List;
 
 /**
  * Created by Bruno de Queiroz<creativelikeadog@gmail.com> on 26/11/15.
@@ -25,7 +26,18 @@ public class Game implements GenericModel {
 
     private Timestamp updated;
 
+    private List<Character> characters;
+
     public Game() {
+    }
+
+    public Game(Long id) {
+        this.id = id;
+    }
+
+    public Game(Long id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
     public Game(Long id, String name, String slug, String picture, Timestamp created, Timestamp updated) {
@@ -90,5 +102,13 @@ public class Game implements GenericModel {
 
     public void setUpdated(Timestamp updated) {
         this.updated = updated;
+    }
+
+    public List<Character> getCharacters() {
+        return characters;
+    }
+
+    public void setCharacters(List<Character> characters) {
+        this.characters = characters;
     }
 }

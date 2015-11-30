@@ -46,28 +46,28 @@ public class DefaultServlet extends HttpServlet {
                     GET getAnnotation = method.getAnnotation(GET.class);
 
                     if (getAnnotation != null && methodAllowed(method)) {
-                        routes.GET(controller, String.format("%s/%s", prefix, getAnnotation.value().replaceFirst("/", "")), method);
+                        routes.GET(controller, String.format("%s/%s", prefix, getAnnotation.value().replaceFirst("^/", "")), method);
                         continue;
                     }
 
                     POST postAnnotation = method.getAnnotation(POST.class);
 
                     if (postAnnotation != null && methodAllowed(method)) {
-                        routes.POST(controller, String.format("%s/%s", prefix, postAnnotation.value().replaceFirst("/", "")), method);
+                        routes.POST(controller, String.format("%s/%s", prefix, postAnnotation.value().replaceFirst("^/", "")), method);
                         continue;
                     }
 
                     PUT putAnnotation = method.getAnnotation(PUT.class);
 
                     if (putAnnotation != null && methodAllowed(method)) {
-                        routes.PUT(controller, String.format("%s/%s", prefix, putAnnotation.value().replaceFirst("/", "")), method);
+                        routes.PUT(controller, String.format("%s/%s", prefix, putAnnotation.value().replaceFirst("^/", "")), method);
                         continue;
                     }
 
                     DELETE delAnnotation = method.getAnnotation(DELETE.class);
 
                     if (delAnnotation != null && methodAllowed(method)) {
-                        routes.DELETE(controller, String.format("%s/%s", prefix, delAnnotation.value().replaceFirst("/", "")), method);
+                        routes.DELETE(controller, String.format("%s/%s", prefix, delAnnotation.value().replaceFirst("^/", "")), method);
                     }
 
                 }

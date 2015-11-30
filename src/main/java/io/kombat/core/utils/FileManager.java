@@ -21,10 +21,10 @@ public class FileManager implements Serializable {
     private static final String UPLOAD_PATH = "./src/main/webapp/uploads";
 
     private File createFile(String path) throws IOException {
-        Pattern p = Pattern.compile("(\\/[^\\.\\/]+\\.[\\d\\w]+)$");
+        Pattern p = Pattern.compile("(.*\\/)([^\\.\\/]+\\.[\\d\\w]+)$");
         Matcher matcher = p.matcher(path);
         if (matcher.find()) {
-            File dir = new File(path.replace(matcher.group(1), ""));
+            File dir = new File(matcher.group(1));
             if (!dir.exists()) {
                 dir.mkdirs();
             }

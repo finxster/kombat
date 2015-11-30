@@ -12,7 +12,15 @@
         </c:forEach>
     </head>
     <body>
+        <c:set var="uri" value="${requestScope['javax.servlet.forward.request_uri']}"/>
         <header>
+            <nav class="menu">
+                <ul>
+                    <li class="${uri.contains('users') ? 'active' : '' }"><a href="/users">Users</a></li>
+                    <li class="${uri.contains('games') ? 'active' : '' }"><a href="/games">Games</a></li>
+                    <li class="${uri.contains('characters') ? 'active' : '' }"><a href="/characters">Characters</a></li>
+                </ul>
+            </nav>
             <jsp:invoke fragment="header"/>
         </header>
         <section id="content">

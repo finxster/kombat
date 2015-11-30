@@ -1,0 +1,147 @@
+package io.kombat.domain.dao;
+
+import io.kombat.domain.model.Character;
+import io.kombat.domain.model.Game;
+
+import javax.enterprise.context.Dependent;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.sql.Timestamp;
+
+/**
+ * Created by Bruno de Queiroz<creativelikeadog@gmail.com> on 27/11/15.
+ */
+#sql context CharacterContext;
+
+#sql iterator CharacterIter(Long id, String name, Long game, String picture, Timestamp created, Timestamp updated, String game_name);
+@Dependent
+public class CharacterDAOImpl implements CharacterDAO {
+
+    private static final long serialVersionUID = 9009122476700684924L;
+
+    private CharacterContext context;
+
+    static {
+        try {
+            Class.forName("oracle.jdbc.OracleDriver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public CharacterDAOImpl() {
+        try {
+            this.context = new CharacterContext(String.format("jdbc:oracle:thin:@%s:%s:XE", HOST, PORT), USER, PASSWORD, true);
+        } catch (SQLException e) {
+            return;
+        }
+    }
+
+    @Override
+    public Character one(Long id) throws SQLException {
+        CharacterIter characters;
+
+        #sql[context] characters = {
+            SELECT
+                c.id_character as id,
+                c.name as name,
+                c.game_id as game,
+                c.picture as picture,
+                c.created as created,
+                c.updated as updated,
+                g.name as game_name
+            FROM characters c
+            INNER JOIN games g ON g.id_game = c.game_id
+            WHERE id_character = :id
+        };
+
+        if (characters.next()) {
+            return new Character(characters.id(), characters.name(), new Game(characters.game(), characters.game_name()), characters.picture(), characters.created(), characters.updated());
+        }
+
+        return null;
+    }
+
+    @Override
+    public void save(Character character) throws SQLException {
+
+        Long id = character.getId();
+        String name = character.getName();
+        String picture = character.getPicture();
+
+        #sql[context] {UPDATE characters SET name = :name, picture = :picture, updated = systimestamp WHERE id_character = :id };
+    }
+
+    @Override
+    public void create(Character model) throws SQLException {
+        Long game = model.getGame().getId();
+        String name = model.getName();
+        String picture = model.getPicture();
+
+        #sql[context] {INSERT INTO characters(id_character, name, game_id, picture) VALUES( characters_seq.nextval, :name, :game, :picture ) };
+    }
+
+    @Override
+    public void destroy(Long id) throws SQLException {
+        #sql[context] {DELETE FROM characters WHERE id_character = :id};
+    }
+
+    @Override
+    public void destroyByGame(Long id) throws SQLException {
+        #sql[context] {DELETE FROM characters WHERE game_id = :id};
+    }
+
+    @Override
+    public List<Character> fetch(Integer offset, Integer limit) throws SQLException {
+        CharacterIter characters;
+
+        List<Character> results = new ArrayList<Character>();
+
+        #sql[context] characters = {
+            SELECT
+                c.id_character as id,
+                c.name as name,
+                c.game_id as game,
+                c.picture as picture,
+                c.created as created,
+                c.updated as updated,
+                g.name as game_name
+            FROM characters c
+            INNER JOIN games g ON g.id_game = c.game_id
+        };
+
+        if (characters.next()) {
+            results.add(new Character(characters.id(), characters.name(), new Game(characters.game(), characters.game_name()), characters.picture(), characters.created(), characters.updated()));
+        }
+
+        return results;
+    }
+
+    @Override
+    public List<Character> byGame(Long id) throws SQLException {
+        CharacterIter characters;
+
+        List<Character> results = new ArrayList<Character>();
+
+        #sql[context] characters = {
+            SELECT
+                c.id_character as id,
+                c.name as name,
+                c.game_id as game,
+                c.picture as picture,
+                c.created as created,
+                c.updated as updated,
+                g.name as game_name
+            FROM characters c
+            INNER JOIN games g ON g.id_game = c.game_id
+            WHERE game_id = :id
+        };
+
+        while(characters.next()) {
+            results.add(new Character(characters.id(), characters.name(), new Game(characters.game(), characters.game_name()), characters.picture(), characters.created(), characters.updated()));
+        }
+
+        return results;
+    }
+}
