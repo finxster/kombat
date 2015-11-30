@@ -5,6 +5,7 @@ import io.kombat.domain.model.GenericModel;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Bruno de Queiroz<creativelikeadog@gmail.com> on 26/11/15.
@@ -27,5 +28,5 @@ public interface GenericDAO<T extends GenericModel> extends Serializable {
 
     void destroy(Long id) throws SQLException;
 
-    List<T> fetch(Integer offset, Integer limit) throws SQLException;
+    List<T> fetch(Map<String, String[]> params, Integer offset, Integer limit) throws SQLException;
 }

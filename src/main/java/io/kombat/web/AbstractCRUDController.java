@@ -31,6 +31,8 @@ public abstract class AbstractCRUDController<T extends GenericModel, S extends G
     @Inject
     protected FileManager manager;
 
+    public static final Integer DEFAULT_PAGE_SIZE = 20;
+
     protected String route;
 
     protected String new_url() {
@@ -151,7 +153,22 @@ public abstract class AbstractCRUDController<T extends GenericModel, S extends G
     @GET
     public void index(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            request.setAttribute("models", service.fetch(0, -1));
+            Map<String, String[]> params = request.getParameterMap();
+            Integer max = DEFAULT_PAGE_SIZE;
+            Integer offset = 0;
+
+            String[] maxes = params.get("max");
+            String[] pages = params.get("page");
+
+            if (maxes != null && maxes.length > 0) {
+                max = Integer.valueOf(maxes[0]);
+            }
+
+            if (pages != null && pages.length > 0) {
+                offset = (Integer.valueOf(pages[0]) - 1) * max;
+            }
+
+            request.setAttribute("models", service.fetch(params, offset, max));
         } catch (SQLException e) {
             request.setAttribute("error", String.format("An Error ocurred %s", e.getMessage()));
         }

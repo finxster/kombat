@@ -21,7 +21,7 @@ public class CharacterServiceImpl extends AbstractGenericService<Character, Char
     @Override
     public List<Game> games() {
         try {
-            return gameService.fetch(0, -1);
+            return gameService.fetch(null, 0, -1);
         } catch (SQLException e) {
             return null;
         }

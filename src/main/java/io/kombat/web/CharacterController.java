@@ -47,7 +47,6 @@ public class CharacterController extends AbstractCRUDController<Character, Chara
     @Before("games")
     @GET("/new")
     public void form(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
         request.getRequestDispatcher(view_path("new.jsp")).forward(request, response);
     }
 

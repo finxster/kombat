@@ -1,24 +1,30 @@
 package io.kombat.domain.dao;
 
 import io.kombat.domain.model.Game;
-import io.kombat.domain.model.Character;
+import io.kombat.domain.dao.FilterType;
+import com.google.common.base.Joiner;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.Timestamp;
+import java.sql.Connection;
+import java.sql.Statement;
+import java.sql.ResultSet;
 
 import javax.enterprise.context.Dependent;
 import java.io.Serializable;
 import javax.inject.Inject;
+import java.util.Map;
 
 /**
  * Created by Bruno de Queiroz<creativelikeadog@gmail.com> on 26/11/15.
  */
 #sql context GameContext;
 
-#sql iterator GameIter(Long id_game, String name, String slug, String picture, Timestamp created, Timestamp updated);
 @Dependent
 public class GameDAOImpl implements GameDAO {
+
+    #sql public static iterator GameIter(Long id, String slug, String name, String picture, Timestamp created, Timestamp updated);
 
     private static final long serialVersionUID = 2741059994483786816L;
 
@@ -26,7 +32,6 @@ public class GameDAOImpl implements GameDAO {
 
     @Inject
     private CharacterDAO characters;
-
 
     static {
         try {
@@ -48,10 +53,10 @@ public class GameDAOImpl implements GameDAO {
     public Game one(Long id) throws SQLException {
         GameIter games;
 
-        #sql[context] games = {SELECT id_game, name, slug, picture, created, updated FROM games WHERE id_game = :id};
+        #sql[context] games = {SELECT id_game as id, name, slug, picture, created, updated FROM games WHERE id_game = :id};
 
         if (games.next()) {
-            Game game = new Game(games.id_game(), games.name(), games.slug(), games.picture(), games.created(), games.updated());
+            Game game = new Game(games.id(), games.name(), games.slug(), games.picture(), games.created(), games.updated());
             game.setCharacters(characters.byGame(game.getId()));
             return game;
         }
@@ -84,15 +89,41 @@ public class GameDAOImpl implements GameDAO {
     }
 
     @Override
-    public List<Game> fetch(Integer offset, Integer limit) throws SQLException {
-        GameIter games;
+    public List<Game> fetch(Map<String, String[]> params, Integer offset, Integer limit) throws SQLException {
+
+        String finalQuery;
+        StringBuilder wrapper = new StringBuilder("SELECT i.* FROM ( %s ) i WHERE i.rnum > %d");
+        StringBuilder query = new StringBuilder("SELECT id_game as id, name, slug, picture, created, updated, rownum as rnum FROM games WHERE 1=1 ");
+
+        if( params != null ){
+            query.append( FilterType.parse( "id", "id_game", params, FilterType.EXACT ) );
+            query.append( FilterType.parse( "slug", "slug", params, FilterType.LIKE ) );
+            query.append( FilterType.parse( "name", "name", params, FilterType.LIKE ) );
+            query.append( FilterType.parse( "updated", "updated", params, FilterType.TIME_GREATER ) );
+        }
+
+        if( offset == null ){
+            offset = 0;
+        }
+
+        if (limit != null && limit > -1 ){
+            wrapper.append(String.format(" AND i.rnum <= %d", limit));
+        }
+
+        finalQuery = String.format(wrapper.toString(), query.toString(), offset);
+
+        Connection conn = context.getConnection();
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(finalQuery);
+
+        GameIter games = null;
 
         List<Game> results = new ArrayList<Game>();
 
-        #sql[context] games = {SELECT id_game, name, slug, picture, created, updated FROM games};
+        #sql[context] games = { CAST :rs };
 
         while(games.next()) {
-            results.add(new Game(games.id_game(), games.name(), games.slug(), games.picture(), games.created(), games.updated()));
+            results.add(new Game(games.id(), games.name(), games.slug(), games.picture(), games.created(), games.updated()));
         }
 
         return results;

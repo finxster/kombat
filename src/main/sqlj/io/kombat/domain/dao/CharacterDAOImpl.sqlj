@@ -8,15 +8,24 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.Timestamp;
+import java.util.Map;
+
+import io.kombat.domain.dao.FilterType;
+import java.sql.Connection;
+import java.sql.Statement;
+import java.sql.ResultSet;
+import java.util.Map;
+import com.google.common.base.Joiner;
 
 /**
  * Created by Bruno de Queiroz<creativelikeadog@gmail.com> on 27/11/15.
  */
 #sql context CharacterContext;
 
-#sql iterator CharacterIter(Long id, String name, Long game, String picture, Timestamp created, Timestamp updated, String game_name);
 @Dependent
 public class CharacterDAOImpl implements CharacterDAO {
+
+    #sql public static iterator CharacterIter(Long id, String name, Long game, String picture, Timestamp created, Timestamp updated, String game_name);
 
     private static final long serialVersionUID = 9009122476700684924L;
 
@@ -93,25 +102,52 @@ public class CharacterDAOImpl implements CharacterDAO {
     }
 
     @Override
-    public List<Character> fetch(Integer offset, Integer limit) throws SQLException {
-        CharacterIter characters;
+    public List<Character> fetch(Map<String, String[]> params, Integer offset, Integer limit) throws SQLException {
+
+        String finalQuery;
+        StringBuilder wrapper = new StringBuilder("SELECT i.* FROM ( %s ) i WHERE i.rnum > %d");
+        StringBuilder query = new StringBuilder();
+
+        query.append("SELECT ");
+        query.append("  c.id_character as id,");
+        query.append("  c.name as name,");
+        query.append("  c.game_id as game,");
+        query.append("  c.picture as picture,");
+        query.append("  c.created as created,");
+        query.append("  c.updated as updated,");
+        query.append("  g.name as game_name,");
+        query.append("  rownum as rnum");
+        query.append(" FROM characters c ");
+        query.append(" INNER JOIN games g ON g.id_game = c.game_id WHERE 1 = 1 ");
+
+        if( params != null ){
+            query.append( FilterType.parse( "id", "id_character", params, FilterType.EXACT ) );
+            query.append( FilterType.parse( "name", "c.name", params, FilterType.LIKE ) );
+            query.append( FilterType.parse( "game", "g.name", params, FilterType.LIKE ) );
+            query.append( FilterType.parse( "updated", "updated", params, FilterType.TIME_GREATER ) );
+        }
+
+        if( offset == null ){
+            offset = 0;
+        }
+
+        if (limit != null && limit > -1 ){
+            wrapper.append(String.format(" AND i.rnum <= %d", limit));
+        }
+
+        finalQuery = String.format(wrapper.toString(), query.toString(), offset);
+
+        Connection conn = context.getConnection();
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(finalQuery);
+
+        CharacterIter characters = null;
 
         List<Character> results = new ArrayList<Character>();
 
-        #sql[context] characters = {
-            SELECT
-                c.id_character as id,
-                c.name as name,
-                c.game_id as game,
-                c.picture as picture,
-                c.created as created,
-                c.updated as updated,
-                g.name as game_name
-            FROM characters c
-            INNER JOIN games g ON g.id_game = c.game_id
-        };
+        #sql[context] characters = { CAST :rs };
 
-        if (characters.next()) {
+        while(characters.next()) {
             results.add(new Character(characters.id(), characters.name(), new Game(characters.game(), characters.game_name()), characters.picture(), characters.created(), characters.updated()));
         }
 

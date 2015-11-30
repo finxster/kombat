@@ -10,6 +10,7 @@ import io.kombat.domain.model.GenericModel;
 import javax.inject.Inject;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 public abstract class AbstractGenericService<T extends GenericModel, U extends GenericDAO<T>> implements GenericService<T> {
 
@@ -35,7 +36,7 @@ public abstract class AbstractGenericService<T extends GenericModel, U extends G
         dao.destroy(id);
     }
 
-    public List<T> fetch(Integer offset, Integer limit) throws SQLException {
-        return dao.fetch(offset, limit);
+    public List<T> fetch(Map<String, String[]> params, Integer offset, Integer limit) throws SQLException {
+        return dao.fetch(params, offset, limit);
     }
 }
