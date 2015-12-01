@@ -24,8 +24,6 @@
                             <button type="reset" class="button">Reset</button>
                         </th>
                     </tr>
-                </thead>
-                <thead>
                     <tr>
                         <th>ID</th>
                         <th>Name</th>

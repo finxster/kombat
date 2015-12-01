@@ -25,7 +25,7 @@ p.warning { background:#FFDCA8}
 p.error { background:#FF6E6E}
 
 body { }
-body > header { position:relative; line-height:4.0rem; }
+body > header { position:relative; line-height:4.0rem; border-bottom:.1rem solid lightgray; }
 body > header { display:flex; flex-flow:row nowrap; align-items:center; justify-content: space-between;}
 body > footer { position:absolute; bottom:0; left:0; right:0; line-height:4.0rem; }
 body > footer { padding:0 1.0rem; background:whitesmoke }
@@ -48,6 +48,7 @@ body > header > .menu:hover ul { display:block; }
 
 table { border-collapse:collapse; width:100%; }
 table tr { border-top:.1rem solid lightgray;}
+table thead tr:first-child { border-top:none; }
 table tr td:last-child,table tr th:last-child { text-align:right; }
 table tbody tr:nth-child(odd) { background:whitesmoke}
 table tr td, table tr th { padding:1.0rem .5rem; text-align:center; font-size:1.2rem; }
