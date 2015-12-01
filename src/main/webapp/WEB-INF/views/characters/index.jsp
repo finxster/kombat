@@ -19,7 +19,6 @@
                         <th><input type="text" name="game" value="${param.game}" placeholder="Game"/></th>
                         <th><input type="datetime-local" name="updated" value="${param.updated}" placeholder="Updated"/></th>
                         <th>
-                            <input type="hidden" name="page" value="${param.page ? param.page : 1}" />
                             <button type="submit" class="button blue">Filter</button>
                             <button type="reset" class="button">Reset</button>
                         </th>
@@ -41,6 +40,13 @@
                         <td><a href="/characters/${character.id}" class="button">Edit</a> <a href="/characters/${character.id}" class="button red ajax-delete">Remove</a></td>
                     </tr>
                 </c:forEach>
+                <tfoot>
+                    <tr>
+                        <td colspan="10">
+                            <jsp:include page="../common/pagination.jsp" />
+                        </td>
+                    </tr>
+                </tfoot>
             </table>
             </form>
         </c:if>

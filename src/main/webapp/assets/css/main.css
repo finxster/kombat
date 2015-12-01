@@ -53,18 +53,18 @@ table tr td:last-child,table tr th:last-child { text-align:right; }
 table tbody tr:nth-child(odd) { background:whitesmoke}
 table tr td, table tr th { padding:1.0rem .5rem; text-align:center; font-size:1.2rem; }
 
-.button { display:inline-block; vertical-align:middle; cursor:pointer; border:none; box-shadow:0 0 .2rem black;  appearance:none; color:#4A4A4A; padding:0rem 1.5rem; border-radius:0.5rem; text-decoration:none; background:white; transition:background .15s ease-in-out; line-height:3.0rem;}
+.button { display:inline-block; vertical-align:middle; cursor:pointer; border:.1rem solid lightgray; appearance:none; color:#4A4A4A; padding:0rem 1.5rem; border-radius:0.5rem; text-decoration:none; background:white; transition:background .15s ease-in-out; line-height:3.0rem;}
 .button:visited { color:#4A4A4A; }
-.button:disabled { background:lightgray; cursor:default;}
+.button:disabled { background:whitesmoke; border-color:lightgray; color:lightgray; cursor:default;}
 .button:hover { background:whitesmoke; text-decoration:none; }
 
 button.button:focus { outline:none; }
 
-.button.blue { box-shadow:none; background:#008EBD; color:white;}
+.button.blue { box-shadow:none; background:#008EBD; border-color:#008EBD; color:white;}
 .button.blue:visited { color:white;}
 .button.blue:hover { background:#14AFE2;}
 
-.button.red { box-shadow:none; background:#FF6E6E; color:white;}
+.button.red { box-shadow:none; background:#FF6E6E; border-color:#FF6E6E; color:white;}
 .button.red:visited { color:white;}
 .button.red:hover { background:#FF8E8E;}
 
@@ -76,4 +76,5 @@ input{ appearance:none; border:.1rem solid #ccc; line-height:2.5rem; text-indent
 .field-error input {border-color:#FF6E6E}
 .field-error .field-error-messages {display:block; font-size:1.0rem; padding:0.5rem;}
 
-
+.pagination { text-align:center; }
+.pagination .button.active { border-color:gray}

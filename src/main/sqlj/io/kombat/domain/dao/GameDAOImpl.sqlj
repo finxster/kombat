@@ -107,7 +107,7 @@ public class GameDAOImpl implements GameDAO {
         }
 
         if (limit != null && limit > -1 ){
-            wrapper.append(String.format(" AND i.rnum <= %d", limit));
+            wrapper.append(String.format(" AND i.rnum <= %d", offset + limit));
         }
 
         finalQuery = String.format(wrapper.toString(), query.toString(), offset);

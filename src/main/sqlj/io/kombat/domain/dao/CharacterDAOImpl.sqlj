@@ -124,7 +124,7 @@ public class CharacterDAOImpl implements CharacterDAO {
             query.append( FilterType.parse( "id", "id_character", params, FilterType.EXACT ) );
             query.append( FilterType.parse( "name", "c.name", params, FilterType.LIKE ) );
             query.append( FilterType.parse( "game", "g.name", params, FilterType.LIKE ) );
-            query.append( FilterType.parse( "updated", "updated", params, FilterType.TIME_GREATER ) );
+            query.append( FilterType.parse( "updated", "c.updated", params, FilterType.TIME_GREATER ) );
         }
 
         if( offset == null ){
@@ -132,7 +132,7 @@ public class CharacterDAOImpl implements CharacterDAO {
         }
 
         if (limit != null && limit > -1 ){
-            wrapper.append(String.format(" AND i.rnum <= %d", limit));
+            wrapper.append(String.format(" AND i.rnum <= %d", offset + limit));
         }
 
         finalQuery = String.format(wrapper.toString(), query.toString(), offset);
