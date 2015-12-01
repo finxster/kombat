@@ -1,5 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <t:page>
 
@@ -36,7 +37,7 @@
                         <td>${character.id}</td>
                         <td>${character.name}</td>
                         <td>${character.game.name}</td>
-                        <td>${character.updated == null ? character.created : character.updated}</td>
+                        <td><fmt:formatDate value="${(character.updated == null ? character.created : character.updated)}" pattern="MM/dd/yyyy hh:mm aaa"/></td>
                         <td><a href="/characters/${character.id}" class="button">Edit</a> <a href="/characters/${character.id}" class="button red ajax-delete">Remove</a></td>
                     </tr>
                 </c:forEach>
