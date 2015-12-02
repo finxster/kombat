@@ -40,8 +40,8 @@ public class ServletRoutes {
 
     public void action(HttpServletRequest request, HttpServletResponse response) throws IllegalAccessException, IOException {
         Matcher matcher;
-        Map<Pattern, ServletMapping> mappings = this.routes.get(request.getMethod());
 
+        Map<Pattern, ServletMapping> mappings = this.routes.get(request.getMethod());
         if (mappings == null) {
             return;
         }

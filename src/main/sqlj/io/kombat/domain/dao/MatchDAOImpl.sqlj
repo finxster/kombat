@@ -1,0 +1,155 @@
+package io.kombat.domain.dao;
+
+import com.google.common.base.Joiner;
+
+import io.kombat.domain.dao.FilterType;
+import io.kombat.domain.model.GamePlay;
+import io.kombat.domain.model.Match;
+import io.kombat.domain.model.MatchStatus;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+
+import javax.enterprise.context.Dependent;
+
+/**
+ * Created by Vinicius Boson Kairala<viniciusboson@gmail.com> on 01/12/15.
+ */
+#sql context MatchContext;
+
+@Dependent
+public class MatchDAOImpl implements MatchDAO {
+
+    #sql public static iterator MatchIter(Long id, String name, Long gamePlay, String status,
+        Long experience, Timestamp created, Timestamp updated, String gameplay_description);
+
+    private static final long serialVersionUID = 9009122476700684924L;
+
+    private MatchContext context;
+
+    static {
+        try {
+            Class.forName("oracle.jdbc.OracleDriver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public MatchDAOImpl() {
+        try {
+            this.context = new MatchContext(String.format("jdbc:oracle:thin:@%s:%s:XE", HOST, PORT), USER, PASSWORD, true);
+        } catch (SQLException e) {
+            return;
+        }
+    }
+
+    @Override
+    public Match one(Long id) throws SQLException {
+        MatchIter matches;
+
+        #sql[context] matches = {
+            SELECT
+                m.id_match as id,
+                m.gameplay_id as gamePlay,
+                m.status as status,
+                m.experience as experience,
+                m.created as created,
+                m.updated as updated,
+                gp.description as gameplay_description
+            FROM Match m
+            INNER JOIN gamesplays gp ON m.gameplay_id = gp.id_gameplay
+            WHERE id_match = :id
+        };
+
+        if (matches.next()) {
+            return new Match(matches.id(), new GamePlay(matches.gamePlay(), matches.gameplay_description()),
+                MatchStatus.get(matches.status()), matches.experience(),  matches.created(), matches.updated());
+        }
+
+        return null;
+    }
+
+    @Override
+    public void save(Match model) throws SQLException {
+        Long id = model.getId();
+        Long gamePlay = model.getGamePlay().getId();
+        String status = model.getStatus().getCode();
+        Long experience = model.getExperience();
+
+        #sql[context] {UPDATE matches SET gameplay_id = :gamePlay, status = :status, experience = :experience, updated = systimestamp WHERE id_match = :id };
+    }
+
+    @Override
+    public void create(Match model) throws SQLException {
+        Long gamePlay = model.getGamePlay().getId();
+        String status = model.getStatus().getCode();
+        Long experience = model.getExperience();
+
+        #sql[context] {INSERT INTO matches(id_match, gameplay_id, status, experience) VALUES( matches_seq.nextval, :gamePlay, :status, :experience ) };
+    }
+
+    @Override
+    public void destroy(Long id) throws SQLException {
+        #sql[context] {DELETE FROM matches WHERE id_match = :id};
+    }
+
+    @Override
+    public List<Match> fetch(Map<String, String[]> params, Integer offset, Integer limit) throws SQLException {
+
+        String finalQuery;
+        StringBuilder wrapper = new StringBuilder("SELECT i.* FROM ( %s ) i WHERE i.rnum > %d");
+        StringBuilder query = new StringBuilder();
+
+        query.append("SELECT ");
+        query.append("  m.id_match as id,");
+        query.append("  m.gameplay_id as gamePlay,");
+        query.append("  m.status as status,");
+        query.append("  m.experience as experience,");
+        query.append("  m.created as created,");
+        query.append("  m.updated as updated,");
+        query.append("  gp.description as gp_description,");
+        query.append("  rownum as rnum");
+        query.append(" FROM Match m ");
+        query.append(" INNER JOIN matches m ON m.gameplay_id = gp.id_gameplay WHERE 1 = 1 ");
+
+        if( params != null ){
+            query.append( FilterType.parse( "id", "id_match", params, FilterType.EXACT ) );
+            query.append( FilterType.parse( "status", "m.status", params, FilterType.EXACT ) );
+            query.append( FilterType.parse( "gamePlay", "gp.description", params, FilterType.LIKE ) );
+            query.append( FilterType.parse( "updated", "updated", params, FilterType.TIME_GREATER ) );
+        }
+
+        if( offset == null ){
+            offset = 0;
+        }
+
+        if (limit != null && limit > -1 ){
+            wrapper.append(String.format(" AND i.rnum <= %d", limit));
+        }
+
+        finalQuery = String.format(wrapper.toString(), query.toString(), offset);
+
+        Connection conn = context.getConnection();
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(finalQuery);
+
+        MatchIter matches = null;
+
+        List<Match> results = new ArrayList<Match>();
+
+        #sql[context] matches = { CAST :rs };
+
+        while(matches.next()) {
+            results.add(new Match(matches.id(), new GamePlay(matches.gamePlay(), matches.gameplay_description()),
+                        MatchStatus.get(matches.status()), matches.experience(),  matches.created(), matches.updated()));
+        }
+
+        return results;
+    }
+}

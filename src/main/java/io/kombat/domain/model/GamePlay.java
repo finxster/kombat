@@ -27,6 +27,15 @@ public class GamePlay implements GenericModel {
     public GamePlay() {
     }
 
+    public GamePlay(Long id) {
+        this.id = id;
+    }
+
+    public GamePlay(Long id, String description) {
+        this.id = id;
+        this.description = description;
+    }
+
     public GamePlay(Long id, String description, GamePlayType type, Timestamp created,
                     Timestamp updated) {
         this.id = id;
