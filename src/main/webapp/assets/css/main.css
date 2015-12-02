@@ -79,7 +79,7 @@ form.inline { display:inline-block; }
 
 fieldset { padding:1.0rem; border:none; }
 label {display:block; font-size:1.1rem; font-weight:bold;}
-input, select { display:inline-block; background:white; border-radius:.3rem; border:.1rem solid #ccc; text-indent:1.0rem; font-size:1.1rem; vertical-align:middle; }
+input:not([type=file]), select { display:inline-block; background:white; border-radius:.3rem; border:.1rem solid #ccc; text-indent:1.0rem; font-size:1.1rem; vertical-align:middle; }
 input { line-height:2.8rem;  width:100%; }
 select { height:3.2rem; min-width:8.0rem;}
 .field-error input {border-color:#FF6E6E}
