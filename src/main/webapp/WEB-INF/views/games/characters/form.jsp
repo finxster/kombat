@@ -9,7 +9,7 @@
     <fieldset class="picture ${pictureValidation ? 'field-error' : '' }">
         <label for="picture">Picture</label>
         <c:if test="${character.picture != null}">
-            <img src="/uploads${character.picture}" height="50px"/>
+            <figure><img src="/uploads${character.picture}" /></figure>
         </c:if>
         <input type="file" id="picture" name="_picture"/>
         <c:if test="${pictureValidation}">

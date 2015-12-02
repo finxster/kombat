@@ -1,7 +1,7 @@
 html { font-size:62.5%; font-family:"Arial", sans-serif; height:100%; }
 html, body { margin:0;. padding:0; }
 body { min-height:100%; }
-body, p, h1, h2, h3, h4, a, ul, li, fieldset, form, input, button, table, thead, tfoot, tbody, tr, td { margin:0; padding:0; font-size:1.0rem; }
+body, p, h1, h2, h3, h4, a, ul, li, fieldset, form, input, button, table, thead, tfoot, tbody, tr, td, figure{ margin:0; padding:0; font-size:1.0rem; }
 
 h1, h2, h3, h4 { letter-spacing:-0.05rem; }
 
@@ -24,9 +24,8 @@ p.notice { background:#D0E6D3}
 p.warning { background:#FFDCA8}
 p.error { background:#FF6E6E}
 
-img { border-radius:50%;}
-
-.table img { max-height:3.0rem; max-width:3.0rem;}
+figure { border-radius:50%; overflow:hidden; background:black; width:8.0rem; height:8.0rem }
+figure img { height:100%; }
 
 body { }
 body > header { position:relative; line-height:4.0rem; border-bottom:.1rem solid lightgray; }
@@ -52,6 +51,7 @@ body > header > .menu:hover > ul { display:block; }
 
 table { border-collapse:collapse; width:100%; }
 table .picture-col { width:3.0rem; padding:0;}
+table figure { width:3.0rem; height:3.0rem; }
 table tr { border-top:.1rem solid lightgray;}
 table thead tr:first-child { border-top:none; }
 table tr td:last-child, table tr th:last-child { text-align:right; }
