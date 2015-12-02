@@ -26,4 +26,18 @@ public class CharacterServiceImpl extends AbstractGenericService<Character, Char
             return null;
         }
     }
+
+    public Game game(Long id) throws SQLException {
+        return gameService.one(id);
+    }
+
+    @Override
+    public Character oneByGame(Long id, Long gameId) throws SQLException {
+        return dao.oneByGame(id, gameId);
+    }
+
+    @Override
+    public void destroyByGame(Long id, Long gameId) throws SQLException {
+        dao.destroyByGame(id, gameId);
+    }
 }

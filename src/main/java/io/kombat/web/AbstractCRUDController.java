@@ -39,18 +39,20 @@ public abstract class AbstractCRUDController<T extends GenericModel, S extends G
         return route + "/new";
     }
 
-    protected String model_url(Long id) {
-        return String.format(route + "/%d", id);
+    protected String model_url(Object key) {
+        return String.format(route + "/%s", key);
     }
 
     protected String view_path(String file) {
-        return String.format("/WEB-INF/views/%s/%s", route, file);
+        return String.format("/WEB-INF/views/%s/%s", route.replaceAll("/:[^/]+/", "/"), file);
     }
 
     public AbstractCRUDController() {
         Controller annotation = this.getClass().getAnnotation(Controller.class);
         route = annotation.value();
     }
+
+    public abstract void model(HttpServletRequest request, HttpServletResponse response) throws IOException;
 
     public void current(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
@@ -88,42 +90,42 @@ public abstract class AbstractCRUDController<T extends GenericModel, S extends G
         request.setAttribute("model", model);
     }
 
+    @Before("current")
+    @GET("/:id")
+    public void show(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.getRequestDispatcher(view_path("show.jsp")).forward(request, response);
+    }
+
     @DELETE("/:id")
     public void destroy(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         try {
             service.destroy(Long.parseLong((String) request.getAttribute("id")));
             session.setAttribute("flash.notice", "Model removed with success.");
-            response.sendRedirect(route);
-
         } catch (SQLException e) {
             session.setAttribute("flash.warning", e.getMessage());
-            response.sendRedirect(route);
         }
-    }
 
-    public abstract void model(HttpServletRequest request, HttpServletResponse response) throws IOException;
+        response.sendRedirect(route);
+    }
 
     @Before(value = {"model"})
     @PUT("/:id")
     public void save(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Long id = Long.parseLong((String) request.getAttribute("id"));
         T model = (T) request.getAttribute("model");
-        String uri = model_url(id);
         HttpSession session = request.getSession();
 
         try {
             model.setId(id);
             service.save(model);
-
             session.setAttribute("flash.notice", "Model saved with success.");
-            response.sendRedirect(uri);
-
         } catch (SQLException e) {
             session.setAttribute("flash.model", model);
             session.setAttribute("flash.warning", e.getMessage());
-            response.sendRedirect(uri);
         }
+
+        response.sendRedirect(model_url(id));
 
     }
 
@@ -175,11 +177,5 @@ public abstract class AbstractCRUDController<T extends GenericModel, S extends G
 
         request.getRequestDispatcher(view_path("index.jsp")).forward(request, response);
 
-    }
-
-    @Before("current")
-    @GET("/:id")
-    public void show(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher(view_path("show.jsp")).forward(request, response);
     }
 }

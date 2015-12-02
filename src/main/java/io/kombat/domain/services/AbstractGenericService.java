@@ -17,7 +17,7 @@ public abstract class AbstractGenericService<T extends GenericModel, U extends G
     private static final long serialVersionUID = -5422985347241623071L;
 
     @Inject
-    private U dao;
+    protected U dao;
 
     public T one(Long id) throws SQLException {
         return dao.one(id);
