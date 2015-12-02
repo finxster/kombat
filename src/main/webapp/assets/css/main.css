@@ -30,7 +30,7 @@ figure img { height:100%; }
 body { }
 body > header { position:relative; line-height:4.0rem; border-bottom:.1rem solid lightgray; }
 body > header { display:flex; flex-flow:row nowrap; align-items:center; justify-content: space-between;}
-body > footer { position:absolute; bottom:0; left:0; right:0; line-height:4.0rem; }
+body > footer { position:fixed; bottom:0; left:0; right:0; line-height:4.0rem; }
 body > footer { padding:0 1.0rem; background:whitesmoke }
 body > header > .menu { flex: 2.5rem 0 0; padding:.5rem 1.0rem;}
 body > header > .button { flex:4.0rem 0 0; text-align:center; margin-right:.5rem}
@@ -48,6 +48,7 @@ body > header > .menu > ul li a { display:block; }
 body > header > .menu:hover { color:#14AFE2; }
 body > header > .menu:hover > ul { display:block; }
 
+body > #content { margin-bottom:4.0rem;}
 
 table { border-collapse:collapse; width:100%; }
 table .picture-col { width:3.0rem; padding:0;}

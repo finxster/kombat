@@ -12,8 +12,8 @@
     <jsp:body>
         <c:if test="${models != null}">
             <form id="filter-form" action="/games" method="GET">
-                <input type="hidden" name="order" value="${param.order}" />
-                <input type="hidden" name="asc" value="${param.asc}" />
+                <input type="hidden" name="order" value="${param.order != null ? param.order : 'updated'}" />
+                <input type="hidden" name="asc" value="${param.asc != null ? param.asc : false}" />
                 <table class="table">
                     <thead>
                         <tr>

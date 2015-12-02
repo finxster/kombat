@@ -105,7 +105,7 @@ public class GameDAOImpl implements GameDAO {
         String[] fields = params.get("order");
         String[] directions = params.get("asc");
 
-        String field = "created";
+        String field = "updated";
         String direction = "DESC";
 
         if( fields != null && fields.length > 0 ){
@@ -120,21 +120,33 @@ public class GameDAOImpl implements GameDAO {
             }
         }
 
-        return String.format(" ORDER BY i.%s %s", field, direction);
+        return String.format(" ORDER BY m.%s %s", field, direction);
     }
 
     @Override
     public List<Game> fetch(Map<String, String[]> params, Integer offset, Integer limit) throws SQLException {
 
         String finalQuery;
-        StringBuilder wrapper = new StringBuilder("SELECT i.* FROM ( %s ) i WHERE i.rnum > %d ");
-        StringBuilder query = new StringBuilder("SELECT id_game as id, name, slug, picture, created, updated, rownum as rnum FROM games m WHERE 1=1 ");
+        StringBuilder wrapper = new StringBuilder("SELECT i.* FROM ( %s ) i WHERE i.rnum > %d");
+        StringBuilder query = new StringBuilder();
+
+        query.append("SELECT ");
+        query.append("  m.id_game as id,");
+        query.append("  m.name,");
+        query.append("  m.slug,");
+        query.append("  m.picture,");
+        query.append("  m.created,");
+        query.append("  m.updated,");
+        query.append("  ROW_NUMBER() OVER ( " );
+        query.append(   orderBy(params)       );
+        query.append("  ) as rnum");
+        query.append(" FROM games m WHERE 1=1 ");
 
         if( params != null ){
-            query.append( FilterType.parse( "id", "id_game", params, FilterType.EXACT ) );
-            query.append( FilterType.parse( "slug", "slug", params, FilterType.LIKE ) );
-            query.append( FilterType.parse( "name", "name", params, FilterType.LIKE ) );
-            query.append( FilterType.parse( "updated", "updated", params, FilterType.TIME_GREATER ) );
+            query.append( FilterType.parse( "id", "m.id_game", params, FilterType.EXACT ) );
+            query.append( FilterType.parse( "slug", "m.slug", params, FilterType.LIKE ) );
+            query.append( FilterType.parse( "name", "m.name", params, FilterType.LIKE ) );
+            query.append( FilterType.parse( "updated", "m.updated", params, FilterType.TIME_GREATER ) );
         }
 
         if( offset == null ){
@@ -144,8 +156,6 @@ public class GameDAOImpl implements GameDAO {
         if (limit != null && limit > -1 ){
             wrapper.append(String.format(" AND i.rnum <= %d", offset + limit));
         }
-
-        wrapper.append( orderBy(params) );
 
         finalQuery = String.format(wrapper.toString(), query.toString(), offset);
 

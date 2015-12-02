@@ -103,7 +103,7 @@ public class MatchDAOImpl implements MatchDAO {
         String[] fields = params.get("order");
         String[] directions = params.get("asc");
 
-        String field = "created";
+        String field = "updated";
         String direction = "DESC";
 
         if( fields != null && fields.length > 0 ){
@@ -118,7 +118,7 @@ public class MatchDAOImpl implements MatchDAO {
             }
         }
 
-        return String.format(" ORDER BY i.%s %s", field, direction);
+        return String.format(" ORDER BY m.%s %s", field, direction);
     }
 
     @Override
@@ -136,16 +136,20 @@ public class MatchDAOImpl implements MatchDAO {
         query.append("  m.created as created,");
         query.append("  m.updated as updated,");
         query.append("  gp.description as gp_description,");
-        query.append("  rownum as rnum");
+        query.append("  ROW_NUMBER() OVER ( " );
+        query.append(   orderBy(params)       );
+        query.append("  ) as rnum");
         query.append(" FROM Match m ");
         query.append(" INNER JOIN matches m ON m.gameplay_id = gp.id_gameplay WHERE 1 = 1 ");
 
         if( params != null ){
-            query.append( FilterType.parse( "id", "id_match", params, FilterType.EXACT ) );
+            query.append( FilterType.parse( "id", "m.id_match", params, FilterType.EXACT ) );
             query.append( FilterType.parse( "status", "m.status", params, FilterType.EXACT ) );
             query.append( FilterType.parse( "gamePlay", "gp.description", params, FilterType.LIKE ) );
-            query.append( FilterType.parse( "updated", "updated", params, FilterType.TIME_GREATER ) );
+            query.append( FilterType.parse( "updated", "m.updated", params, FilterType.TIME_GREATER ) );
         }
+
+        query.append( orderBy(params) );
 
         if( offset == null ){
             offset = 0;
@@ -154,8 +158,6 @@ public class MatchDAOImpl implements MatchDAO {
         if (limit != null && limit > -1 ){
             wrapper.append(String.format(" AND i.rnum <= %d", limit));
         }
-
-        wrapper.append( orderBy(params) );
 
         finalQuery = String.format(wrapper.toString(), query.toString(), offset);
 
