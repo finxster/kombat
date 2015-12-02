@@ -1,23 +1,30 @@
+UPDATE Users SET updated = created WHERE updated is null;
 ALTER TABLE Users
-    MODIFY updated DEFAULT systimestamp;
+    MODIFY updated DEFAULT systimestamp NOT NULL;
 
+UPDATE Games SET updated = created WHERE updated is null;
 ALTER TABLE Games
-    MODIFY updated DEFAULT systimestamp;
+    MODIFY updated DEFAULT systimestamp NOT NULL;
 
+UPDATE Characters SET updated = created WHERE updated is null;
 ALTER TABLE Characters
-    MODIFY updated DEFAULT systimestamp;
+    MODIFY updated DEFAULT systimestamp NOT NULL;
 
+UPDATE Users_Games SET updated = created WHERE updated is null;
 ALTER TABLE Users_Games
-    MODIFY updated DEFAULT systimestamp;
+    MODIFY updated DEFAULT systimestamp NOT NULL;
 
+UPDATE User_Characters SET updated = created WHERE updated is null;
 ALTER TABLE User_Characters
-    MODIFY updated DEFAULT systimestamp;
+    MODIFY updated DEFAULT systimestamp NOT NULL;
 
+UPDATE Gameplays SET updated = created WHERE updated is null;
 ALTER TABLE Gameplays
-    MODIFY updated DEFAULT systimestamp;
+    MODIFY updated DEFAULT systimestamp NOT NULL;
 
+UPDATE Matches SET updated = created WHERE updated is null;
 ALTER TABLE Matches
-    MODIFY updated DEFAULT systimestamp;
+    MODIFY updated DEFAULT systimestamp NOT NULL;
 
 
 ---
