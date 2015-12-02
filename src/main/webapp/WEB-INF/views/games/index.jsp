@@ -39,7 +39,7 @@
                     </thead>
                     <c:forEach var="game" items="${models}">
                         <tr>
-                            <td><c:if test="${game.picture != null}"><img src="/uploads${game.picture}"/></c:if></td>
+                            <td><c:if test="${game.picture != null}"><figure><img src="/uploads${game.picture}"/></figure></c:if></td>
                             <td class="text-left">${game.id}</td>
                             <td>${game.slug}</td>
                             <td>${game.name}</td>

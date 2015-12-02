@@ -11,7 +11,7 @@
         <c:if test="${character.picture != null}">
             <img src="/uploads${character.picture}" height="50px"/>
         </c:if>
-        <input type="file" name="picture"/>
+        <input type="file" id="picture" name="_picture"/>
         <c:if test="${pictureValidation}">
              <ul class="field-error-messages">
                 <c:forEach var="validation" items="${validations.get('picture')}">
@@ -25,7 +25,7 @@
 
     <fieldset class="name ${nameValidation ? 'field-error' : '' }">
         <label for="name">Name</label>
-        <input type="text" name="name" value="${character != null ? character.name : ''}" maxlength="100"/>
+        <input type="text" id="name" name="name" value="${character != null ? character.name : ''}" maxlength="100"/>
         <c:if test="${nameValidation}">
             <ul class="field-error-messages">
                 <c:forEach var="validation" items="${validations.get('name')}">

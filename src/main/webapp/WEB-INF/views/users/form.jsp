@@ -10,7 +10,7 @@
 
     <fieldset class="name ${nameValidation ? 'field-error' : '' }">
         <label for="name">Name</label>
-        <input type="text" name="name" value="${user != null ? user.name : ''}" maxlength="100"/>
+        <input type="text" id="name" name="name" value="${user != null ? user.name : ''}" maxlength="100"/>
         <c:if test="${nameValidation}">
             <ul class="field-error-messages">
                 <c:forEach var="validation" items="${validations.get('name')}">
@@ -24,7 +24,7 @@
 
     <fieldset class="email ${emailValidation ? 'field-error' : '' }">
         <label for="email">Email</label>
-        <input type="email" name="email" value="${user != null  ? user.email : ''}" maxlength="50"/>
+        <input type="email" id="email" name="email" value="${user != null  ? user.email : ''}" maxlength="50"/>
         <c:if test="${emailValidation}">
              <ul class="field-error-messages">
                 <c:forEach var="validation" items="${validations.get('email')}">
@@ -37,11 +37,11 @@
 	<c:set var="pictureValidation" value="${validations != null && validations.get('picture') != null}"/>
 
     <fieldset class="picture ${pictureValidation ? 'field-error' : '' }">
-        <label for="userPicture">Picture</label>
+        <label for="picture">Picture</label>
         <c:if test="${user.picture != null}">
             <img src="/uploads${user.picture}" height="50px"/>
         </c:if>
-        <input type="file" name="userPicture"/>
+        <input type="file" id="picture" name="_picture"/>
         <c:if test="${pictureValidation}">
              <ul class="field-error-messages">
                 <c:forEach var="validation" items="${validations.get('picture')}">

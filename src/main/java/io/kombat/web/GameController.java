@@ -17,7 +17,10 @@ public class GameController extends AbstractCRUDController<Game, GameService> {
     public void model(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Game game = new Game();
 
-        String picturePath = manager.create(request, "picture", route);
+        String picturePath = request.getParameter("picture");
+        if (picturePath == null || picturePath.trim().equals("")) {
+            picturePath = manager.create(request, "_picture", route);
+        }
 
         game.setName(request.getParameter("name"));
         if (picturePath != null) {

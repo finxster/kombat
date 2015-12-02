@@ -40,7 +40,7 @@
                     </thead>
                     <c:forEach var="character" items="${models}">
                         <tr>
-                            <td><c:if test="${character.picture != null}"><img src="/uploads${character.picture}"/></c:if></td>
+                            <td><c:if test="${character.picture != null}"><figure><img src="/uploads${character.picture}"/></figure></c:if></td>
                             <td class="text-left">${character.id}</td>
                             <td>${character.name}</td>
                             <td>${character.game.name}</td>

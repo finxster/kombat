@@ -59,7 +59,10 @@ public class CharacterController extends AbstractCRUDController<Character, Chara
     public void model(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Character character = new Character();
 
-        String picturePath = manager.create(request, "picture", "/characters");
+        String picturePath = request.getParameter("picture");
+        if (picturePath == null || picturePath.trim().equals("")) {
+            picturePath = manager.create(request, "_picture", "/characters");
+        }
 
         character.setName(request.getParameter("name"));
         character.setGame((Game) request.getAttribute("game"));
