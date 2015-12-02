@@ -87,3 +87,8 @@ select { height:3.2rem; min-width:8.0rem;}
 
 .pagination { text-align:center; }
 .pagination .button.active { border-color:gray}
+
+.order-field{ cursor:pointer; transition:color .2s ease-in-out; position:relative; }
+.order-field:hover{ color:gray; }
+.order-field:hover:after{ content:'\2191'; position:absolute; right:-1rem; top:-.2rem; font-size:1.6rem; display:inline-block; vertical-align:0rem; }
+.order-field.desc:hover:after{ content:'\2193'; }

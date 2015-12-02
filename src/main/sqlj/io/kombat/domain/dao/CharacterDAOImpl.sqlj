@@ -10,7 +10,7 @@ import java.util.List;
 import java.sql.Timestamp;
 import java.util.Map;
 
-import io.kombat.domain.dao.FilterType;
+import io.kombat.domain.util.FilterType;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.ResultSet;
@@ -121,6 +121,28 @@ public class CharacterDAOImpl implements CharacterDAO {
         #sql[context] {DELETE FROM characters WHERE id_character = :id AND game_id = :gameId};
     }
 
+    private String orderBy(Map<String,String[]> params){
+        String[] fields = params.get("order");
+        String[] directions = params.get("asc");
+
+        String field = "created";
+        String direction = "DESC";
+
+        if( fields != null && fields.length > 0 ){
+            if ( !fields[0].isEmpty() ){
+                field = fields[0];
+            }
+        }
+
+        if( directions != null && directions.length > 0 ){
+            if ( !directions[0].isEmpty() ){
+                direction = Boolean.valueOf(directions[0]) ? "ASC" : "DESC";
+            }
+        }
+
+        return String.format(" ORDER BY i.%s %s", field, direction);
+    }
+
     @Override
     public List<Character> fetch(Map<String, String[]> params, Integer offset, Integer limit) throws SQLException {
 
@@ -155,6 +177,8 @@ public class CharacterDAOImpl implements CharacterDAO {
         if (limit != null && limit > -1 ){
             wrapper.append(String.format(" AND i.rnum <= %d", offset + limit));
         }
+
+        wrapper.append( orderBy(params) );
 
         finalQuery = String.format(wrapper.toString(), query.toString(), offset);
 

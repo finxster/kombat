@@ -2,7 +2,7 @@ package io.kombat.domain.dao;
 
 import com.google.common.base.Joiner;
 
-import io.kombat.domain.dao.FilterType;
+import io.kombat.domain.util.FilterType;
 import io.kombat.domain.model.GamePlay;
 import io.kombat.domain.model.Match;
 import io.kombat.domain.model.MatchStatus;
@@ -99,6 +99,28 @@ public class MatchDAOImpl implements MatchDAO {
         #sql[context] {DELETE FROM matches WHERE id_match = :id};
     }
 
+    private String orderBy(Map<String,String[]> params){
+        String[] fields = params.get("order");
+        String[] directions = params.get("asc");
+
+        String field = "created";
+        String direction = "DESC";
+
+        if( fields != null && fields.length > 0 ){
+            if ( !fields[0].isEmpty() ){
+                field = fields[0];
+            }
+        }
+
+        if( directions != null && directions.length > 0 ){
+            if ( !directions[0].isEmpty() ){
+                direction = Boolean.valueOf(directions[0]) ? "ASC" : "DESC";
+            }
+        }
+
+        return String.format(" ORDER BY i.%s %s", field, direction);
+    }
+
     @Override
     public List<Match> fetch(Map<String, String[]> params, Integer offset, Integer limit) throws SQLException {
 
@@ -132,6 +154,8 @@ public class MatchDAOImpl implements MatchDAO {
         if (limit != null && limit > -1 ){
             wrapper.append(String.format(" AND i.rnum <= %d", limit));
         }
+
+        wrapper.append( orderBy(params) );
 
         finalQuery = String.format(wrapper.toString(), query.toString(), offset);
 

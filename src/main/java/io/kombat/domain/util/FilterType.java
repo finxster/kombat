@@ -1,4 +1,4 @@
-package io.kombat.domain.dao;
+package io.kombat.domain.util;
 
 import java.util.Map;
 

@@ -1,7 +1,7 @@
 package io.kombat.domain.dao;
 
 import io.kombat.domain.model.Game;
-import io.kombat.domain.dao.FilterType;
+import io.kombat.domain.util.FilterType;
 import com.google.common.base.Joiner;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -101,12 +101,34 @@ public class GameDAOImpl implements GameDAO {
         #sql[context] {DELETE FROM games WHERE id_game = :id};
     }
 
+    private String orderBy(Map<String,String[]> params){
+        String[] fields = params.get("order");
+        String[] directions = params.get("asc");
+
+        String field = "created";
+        String direction = "DESC";
+
+        if( fields != null && fields.length > 0 ){
+            if ( !fields[0].isEmpty() ){
+                field = fields[0];
+            }
+        }
+
+        if( directions != null && directions.length > 0 ){
+            if ( !directions[0].isEmpty() ){
+                direction = Boolean.valueOf(directions[0]) ? "ASC" : "DESC";
+            }
+        }
+
+        return String.format(" ORDER BY i.%s %s", field, direction);
+    }
+
     @Override
     public List<Game> fetch(Map<String, String[]> params, Integer offset, Integer limit) throws SQLException {
 
         String finalQuery;
-        StringBuilder wrapper = new StringBuilder("SELECT i.* FROM ( %s ) i WHERE i.rnum > %d");
-        StringBuilder query = new StringBuilder("SELECT id_game as id, name, slug, picture, created, updated, rownum as rnum FROM games WHERE 1=1 ");
+        StringBuilder wrapper = new StringBuilder("SELECT i.* FROM ( %s ) i WHERE i.rnum > %d ");
+        StringBuilder query = new StringBuilder("SELECT id_game as id, name, slug, picture, created, updated, rownum as rnum FROM games m WHERE 1=1 ");
 
         if( params != null ){
             query.append( FilterType.parse( "id", "id_game", params, FilterType.EXACT ) );
@@ -122,6 +144,8 @@ public class GameDAOImpl implements GameDAO {
         if (limit != null && limit > -1 ){
             wrapper.append(String.format(" AND i.rnum <= %d", offset + limit));
         }
+
+        wrapper.append( orderBy(params) );
 
         finalQuery = String.format(wrapper.toString(), query.toString(), offset);
 
