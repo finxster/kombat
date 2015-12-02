@@ -3,6 +3,8 @@
     <c:if test="${param.method_override != null}">
         <input type="hidden" name="_method" value="${param.method_override}"/>
     </c:if>
+    
+    <input type="hidden" name="picture" value="${user.picture}" />
 
     <c:set var="nameValidation" value="${validations != null && validations.get('name') != null}"/>
 
@@ -35,11 +37,11 @@
 	<c:set var="pictureValidation" value="${validations != null && validations.get('picture') != null}"/>
 
     <fieldset class="picture ${pictureValidation ? 'field-error' : '' }">
-        <label for="picture">Picture</label>
+        <label for="userPicture">Picture</label>
         <c:if test="${user.picture != null}">
             <img src="/uploads${user.picture}" height="50px"/>
         </c:if>
-        <input type="file" name="picture"/>
+        <input type="file" name="userPicture"/>
         <c:if test="${pictureValidation}">
              <ul class="field-error-messages">
                 <c:forEach var="validation" items="${validations.get('picture')}">

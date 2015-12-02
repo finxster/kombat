@@ -14,19 +14,22 @@ import java.io.IOException;
 @Controller("/users")
 public class UserController extends AbstractCRUDController<User, UserService> {
 
-    public void model(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        User user = new User();
+	public void model(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		User user = new User();
 
-        String picturePath = manager.create(request, "picture", route);
+		String picturePath = request.getParameter("picture");
+		if (picturePath == null || picturePath.trim().equals("")) {
+			picturePath = manager.create(request, "userPicture", route);
+		}
 
-        user.setName(request.getParameter("name"));
-        user.setEmail(request.getParameter("email"));
+		user.setName(request.getParameter("name"));
+		user.setEmail(request.getParameter("email"));
 
-        if (picturePath != null) {
-            user.setPicture(picturePath);
-        }
+		if (picturePath != null) {
+			user.setPicture(picturePath);
+		}
 
-        validate(user, request, response);
-    }
+		validate(user, request, response);
+	}
 
 }
