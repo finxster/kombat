@@ -4,32 +4,6 @@
         <input type="hidden" name="_method" value="${param.method_override}"/>
     </c:if>
 
-    <c:set var="gameValidation" value="${validations != null && validations.get('game') != null}"/>
-
-    <fieldset class="game ${gameValidation ? 'field-error' : '' }">
-        <label for="game">Game</label>
-        <select name="game_id">
-            <c:forEach var="game" items="${games}">
-                <c:choose>
-                    <c:when test="${game.id == character.game.id}">
-                        <option value="${game.id}" label="${game.name}" selected/>
-                    </c:when>
-                    <c:otherwise>
-                        <option value="${game.id}" label="${game.name}"/>
-                    </c:otherwise>
-                </c:choose>
-            </c:forEach>
-        </select>
-        <c:if test="${gameValidation}">
-             <ul class="field-error-messages">
-                <c:forEach var="validation" items="${validations.get('game')}">
-                    <li>${validation}</li>
-                </c:forEach>
-            </ul>
-        </c:if>
-    </fieldset>
-
-
     <c:set var="pictureValidation" value="${validations != null && validations.get('picture') != null}"/>
 
     <fieldset class="picture ${pictureValidation ? 'field-error' : '' }">

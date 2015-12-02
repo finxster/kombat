@@ -49,19 +49,32 @@ public class GameDAOImpl implements GameDAO {
         }
     }
 
-    @Override
-    public Game one(Long id) throws SQLException {
+    private Game one(String query) throws SQLException {
         GameIter games;
 
-        #sql[context] games = {SELECT id_game as id, name, slug, picture, created, updated FROM games WHERE id_game = :id};
+        Connection conn = context.getConnection();
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(String.format("SELECT id_game as id, name, slug, picture, created, updated FROM games WHERE %s", query));
+
+        List<Game> results = new ArrayList<Game>();
+
+        #sql[context] games = { CAST :rs };
 
         if (games.next()) {
-            Game game = new Game(games.id(), games.name(), games.slug(), games.picture(), games.created(), games.updated());
-            game.setCharacters(characters.byGame(game.getId()));
-            return game;
+            return new Game(games.id(), games.name(), games.slug(), games.picture(), games.created(), games.updated());
         }
 
         return null;
+    }
+
+    @Override
+    public Game one(Long id) throws SQLException {
+        return this.one(String.format("id_game = %d", id));
+    }
+
+    @Override
+    public Game oneBySlug(String slug) throws SQLException {
+        return this.one(String.format("slug = '%s'", slug));
     }
 
     public void save(Game game) throws SQLException {
@@ -84,8 +97,8 @@ public class GameDAOImpl implements GameDAO {
     }
 
     public void destroy(Long id) throws SQLException {
-        #sql[context] {DELETE FROM games WHERE id_game = :id};
         characters.destroyByGame(id);
+        #sql[context] {DELETE FROM games WHERE id_game = :id};
     }
 
     @Override

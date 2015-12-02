@@ -5,7 +5,7 @@
 <t:page>
 
     <jsp:attribute name="header">
-      <h1><a href="/games/">Games</a> / ${game.slug}</h1>
+      <h1><a href="/games/">Games</a> / ${game.name}</h1>
     </jsp:attribute>
 
     <jsp:body>

@@ -47,29 +47,44 @@ public class CharacterDAOImpl implements CharacterDAO {
         }
     }
 
-    @Override
-    public Character one(Long id) throws SQLException {
+    private Character one(String query) throws SQLException {
         CharacterIter characters;
 
-        #sql[context] characters = {
-            SELECT
-                c.id_character as id,
-                c.name as name,
-                c.game_id as game,
-                c.picture as picture,
-                c.created as created,
-                c.updated as updated,
-                g.name as game_name
-            FROM characters c
-            INNER JOIN games g ON g.id_game = c.game_id
-            WHERE id_character = :id
-        };
+        String finalQuery = String.format(
+          "SELECT "+
+          "  c.id_character as id,"+
+          "  c.name as name,"+
+          "  c.game_id as game,"+
+          "  c.picture as picture,"+
+          "  c.created as created,"+
+          "  c.updated as updated,"+
+          "  g.name as game_name"+
+          " FROM characters c "+
+          " INNER JOIN games g ON g.id_game = c.game_id WHERE %s ", query);
+
+        Connection conn = context.getConnection();
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(finalQuery);
+
+        List<Character> results = new ArrayList<Character>();
+
+        #sql[context] characters = { CAST :rs };
 
         if (characters.next()) {
             return new Character(characters.id(), characters.name(), new Game(characters.game(), characters.game_name()), characters.picture(), characters.created(), characters.updated());
         }
 
         return null;
+    }
+
+    @Override
+    public Character one(Long id) throws SQLException {
+        return this.one(String.format("id_character = %d", id));
+    }
+
+    @Override
+    public Character oneByGame(Long id, Long gameId) throws SQLException {
+        return this.one(String.format("id_character = %d AND game_id = %d", id, gameId));
     }
 
     @Override
@@ -102,6 +117,11 @@ public class CharacterDAOImpl implements CharacterDAO {
     }
 
     @Override
+    public void destroyByGame(Long id, Long gameId) throws SQLException {
+        #sql[context] {DELETE FROM characters WHERE id_character = :id AND game_id = :gameId};
+    }
+
+    @Override
     public List<Character> fetch(Map<String, String[]> params, Integer offset, Integer limit) throws SQLException {
 
         String finalQuery;
@@ -125,6 +145,7 @@ public class CharacterDAOImpl implements CharacterDAO {
             query.append( FilterType.parse( "name", "c.name", params, FilterType.LIKE ) );
             query.append( FilterType.parse( "game", "g.name", params, FilterType.LIKE ) );
             query.append( FilterType.parse( "updated", "c.updated", params, FilterType.TIME_GREATER ) );
+            query.append( FilterType.parse( "game_id", "g.id_game", params, FilterType.EXACT ) );
         }
 
         if( offset == null ){
@@ -146,33 +167,6 @@ public class CharacterDAOImpl implements CharacterDAO {
         List<Character> results = new ArrayList<Character>();
 
         #sql[context] characters = { CAST :rs };
-
-        while(characters.next()) {
-            results.add(new Character(characters.id(), characters.name(), new Game(characters.game(), characters.game_name()), characters.picture(), characters.created(), characters.updated()));
-        }
-
-        return results;
-    }
-
-    @Override
-    public List<Character> byGame(Long id) throws SQLException {
-        CharacterIter characters;
-
-        List<Character> results = new ArrayList<Character>();
-
-        #sql[context] characters = {
-            SELECT
-                c.id_character as id,
-                c.name as name,
-                c.game_id as game,
-                c.picture as picture,
-                c.created as created,
-                c.updated as updated,
-                g.name as game_name
-            FROM characters c
-            INNER JOIN games g ON g.id_game = c.game_id
-            WHERE game_id = :id
-        };
 
         while(characters.next()) {
             results.add(new Character(characters.id(), characters.name(), new Game(characters.game(), characters.game_name()), characters.picture(), characters.created(), characters.updated()));

@@ -18,7 +18,6 @@
                 <ul>
                     <li class="${uri.contains('users') ? 'active' : '' }"><a href="/users">Users</a></li>
                     <li class="${uri.contains('games') ? 'active' : '' }"><a href="/games">Games</a></li>
-                    <li class="${uri.contains('characters') ? 'active' : '' }"><a href="/characters">Characters</a></li>
                 </ul>
             </nav>
             <jsp:invoke fragment="header"/>
@@ -41,9 +40,15 @@
         <footer>
             <jsp:invoke fragment="footer"/>
             <p id="copyright">Copyright 2015, AvenueCode.</p>
+            <script src="https://code.jquery.com/jquery-2.1.4.min.js" type="text/javascript"></script>
+            <script src="/assets/js/main.js" type="text/javascript"></script>
             <c:forEach var="script" items="${scripts}">
               <script src="${script}" type="text/javascript"></script>
             </c:forEach>
+
+            <form action="" id="delete-form" method="POST">
+                <input type="hidden" name="_method" value="DELETE"/>
+            </form>
         </footer>
     </body>
 </html>
